@@ -1,12 +1,12 @@
 const { EventEmitter2 } = require('eventemitter2');
 const { spawn } = require('child_process');
-const StringUtils = require('../../utils/string-utils');
+const StringUtils = require('../utils/string-utils');
 const path = require('path');
 const { default: GkmKeyboardEvent } = require('./model/gkm-keyboard-event');
 const { default: GkmMouseWheelEvent } = require('./model/gkm-mousewheel-event');
 
 const events = new EventEmitter2({ wildcard: true });
-const gkm = spawn('java', ['-jar', path.join(__dirname, '../../jar-lib/gkm.jar')]);
+const gkm = spawn('java', ['-jar', path.join(__dirname, '../jar-lib/gkm.jar')]);
 
 gkm.stdout.on('data', function (data) {
     data = data.toString().split(/\r\n|\r|\n/).filter(function (item) { return item; });

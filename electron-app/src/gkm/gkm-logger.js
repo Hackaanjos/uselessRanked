@@ -1,8 +1,14 @@
 const gkmListener = require('./gkm-listener');
+const KeyboardEvent = require('../models/keyboard-event');
+
 
 function initialize() {
-    gkmListener.events.on('keyboard', function (keyboardEvent) {
-        console.log('Keyboard event:', keyboardEvent);
+    gkmListener.events.on('keyboard', async function (keyboardEventData) {
+        if (keyboardEventData.eventType !== 'RELEASED') return;
+        
+        await KeyboardEvent.query().insert({
+            keyCode: keyboardEventData.keyCode,
+        });
     });
 
     gkmListener.events.on('mouse', function (mouseEvent) {

@@ -85,6 +85,7 @@ public class AuthController {
 
     /**
      * Realiza o logout do usuário e redireciona para a página inicial.
+     * Se o usuário não estiver autenticado, redireciona para a página inicial com mensagem de erro.
      *
      * @param request HttpServletRequest para acessar a sessão
      * @param response HttpServletResponse para configurar os headers de resposta
@@ -94,17 +95,19 @@ public class AuthController {
     public RedirectView logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (auth != null) {
-            HttpSession session = request.getSession(false);
-            if (session != null) {
-                session.invalidate();
-            }
-
-            new SecurityContextLogoutHandler().logout(request, response, auth);
-
-            SecurityContextHolder.clearContext();
+        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
+            return new RedirectView("/?error=Usuário não está autenticado");
         }
 
-        return new RedirectView("/");
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        new SecurityContextLogoutHandler().logout(request, response, auth);
+
+        SecurityContextHolder.clearContext();
+
+        return new RedirectView("/?message=Logout realizado com sucesso");
     }
 }

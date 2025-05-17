@@ -15,10 +15,13 @@ import java.util.Map;
 public class HomeController {
 
     @GetMapping()
-    public ResponseEntity<Map<String, Object>> index() {
+    public ResponseEntity<Map<String, Object>> index(
+            @RequestParam(required = false) String error,
+            @RequestParam(required = false) String message) {
+        
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean isAuthenticated = authentication != null &&
-                                authentication.isAuthenticated() &&
+        boolean isAuthenticated = authentication != null && 
+                                authentication.isAuthenticated() && 
                                 !"anonymousUser".equals(authentication.getPrincipal());
 
         if (isAuthenticated && authentication.getPrincipal() instanceof OAuth2User) {
@@ -28,13 +31,17 @@ public class HomeController {
                 "isAuthenticated", true,
                 "user", Map.of(
                     "name", oAuth2User.getAttribute("name")
-                )
+                ),
+                "error", error != null ? error : "",
+                "success", message != null ? message : ""
             ));
         }
 
         return ResponseEntity.ok(Map.of(
             "message", "Olá mundo!",
-            "isAuthenticated", false
+            "isAuthenticated", false,
+            "error", error != null ? error : "",
+            "success", message != null ? message : ""
         ));
     }
 }

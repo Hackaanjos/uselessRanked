@@ -5,7 +5,7 @@ export default class GkmMouseEvent {
     x;
     y;
 
-    GkmMouseEvent(eventType, button, clickCount, x, y) {
+    constructor(eventType, button, clickCount, x, y) {
         this.eventType = eventType;
         this.button = button;
         this.clickCount = clickCount;

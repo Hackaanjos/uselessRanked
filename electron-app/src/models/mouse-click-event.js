@@ -1,8 +1,8 @@
 const { Model } = require('objection');
 
-class KeyboardEvent extends Model {
+class MouseClickEvent extends Model {
     static get tableName() {
-        return 'keyboard_events';
+        return 'mouse_click_event';
     }
 
     static get idColumn() {
@@ -12,10 +12,10 @@ class KeyboardEvent extends Model {
     static get jsonSchema() {
         return {
             type: 'object',
-            required: ['keyCode'],
+            required: ['clickButton'],
             properties: {
                 id: { type: 'integer' },
-                keyCode: { type: 'integer' },
+                clickButton: { type: 'integer' },
                 createdAt: { type: 'string', format: 'date-time' },
             }
         };
@@ -26,4 +26,4 @@ class KeyboardEvent extends Model {
     }
 }
 
-module.exports = KeyboardEvent;
+module.exports = MouseClickEvent;

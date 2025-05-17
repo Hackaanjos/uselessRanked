@@ -4,6 +4,7 @@ const StringUtils = require('../utils/string-utils');
 const path = require('path');
 const { default: GkmKeyboardEvent } = require('./model/gkm-keyboard-event');
 const { default: GkmMouseWheelEvent } = require('./model/gkm-mousewheel-event');
+const { default: GkmMouseEvent } = require('./model/gkm-mouse-event');
 
 const events = new EventEmitter2({ wildcard: true });
 const gkm = spawn('java', ['-jar', path.join(__dirname, '../jar-lib/gkm.jar')]);
@@ -21,7 +22,7 @@ gkm.stdout.on('data', function (data) {
                 break;
             case 'mouse':
                 var parsedData = JSON.parse(parts[1]);
-                var mouseEvent = new GkmKeyboardEvent(parsedData.eventType, parsedData.button, parsedData.x, parsedData.y);
+                var mouseEvent = new GkmMouseEvent(parsedData.eventType, parsedData.button, parsedData.clickCount, parsedData.x, parsedData.y);
                 events.emit('mouse', mouseEvent);
                 break;
             case 'mousewheel':

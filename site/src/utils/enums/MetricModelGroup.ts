@@ -1,0 +1,1 @@
+export type MetricModelGroup = 'keyboard' | 'mouse' | 'behavior';

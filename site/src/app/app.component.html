@@ -1,73 +1,105 @@
-<mat-sidenav-container class="h-screen bg-gray-50">
-    <mat-sidenav mode="side" opened class="w-64 bg-cyan-600 text-white">
-        <mat-toolbar color="primary">Ranking Types</mat-toolbar>
+<mat-sidenav-container class="h-screen">
+    <mat-sidenav mode="side" opened>
+        <h1 class="title">
+            Useless Ranked
+        </h1>
         <mat-nav-list>
             <mat-list-item>
-                <button mat-button class="w-full text-left" (click)="selectRanking('keyboard')">Keyboard</button>
+                <button mat-flat-button class="w-full text-left" (click)="selectRanking('keyboard')">Teclado</button>
             </mat-list-item>
             <mat-list-item>
-                <button mat-button class="w-full text-left" (click)="selectRanking('mouse')">Mouse</button>
+                <button mat-flat-button class="w-full text-left" (click)="selectRanking('mouse')">Mouse</button>
             </mat-list-item>
             <mat-list-item>
-                <button mat-button class="w-full text-left" (click)="selectRanking('behavior')">Behavior</button>
+                <button mat-flat-button class="w-full text-left" (click)="selectRanking('behavior')">Comportamento</button>
             </mat-list-item>
         </mat-nav-list>
     </mat-sidenav>
 
     <mat-sidenav-content>
-        <mat-toolbar color="accent">
-            <span>{{ selectedRanking }} Ranking</span>
-        </mat-toolbar>
+        <h2 class="page-title">
+            Ranques de {{ selectedRanking }}
+        </h2>
 
-        <div class="p-4">
-            <!-- Period Selector -->
-            <mat-button-toggle-group [(ngModel)]="period" appearance="legacy">
-                <mat-button-toggle value="day">Day</mat-button-toggle>
-                <mat-button-toggle value="week">Week</mat-button-toggle>
-                <mat-button-toggle value="month">Month</mat-button-toggle>
-            </mat-button-toggle-group>
+        <div class="page-content">
+            <ng-template ngFor let-item [ngForOf]="rankings" let-i="index">
+                <mat-card>
+                    <mat-card-header>
+                        <h3 class="card-title">
+                            {{ item.name }} ({{ item.unit }})
+                        </h3>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+                            <mat-tab label="Diario">
+                                <table mat-table [dataSource]="item.ranking">
+                                    <ng-container matColumnDef="position">
+                                        <th mat-header-cell *matHeaderCellDef> Posição </th>
+                                        <td mat-cell *matCellDef="let element; let i = index"> {{ i + 1 }} </td>
+                                    </ng-container>
 
-            <!-- User Ranking Table -->
-            <mat-card class="mt-4">
-                <mat-card-title>User Rankings</mat-card-title>
-                <div class="overflow-x-auto">
-                    <table mat-table [dataSource]="rankings" class="mat-elevation-z1 w-full">
+                                    <ng-container matColumnDef="name">
+                                        <th mat-header-cell *matHeaderCellDef> Usuário </th>
+                                        <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+                                    </ng-container>
 
-                        <ng-container matColumnDef="position">
-                            <th mat-header-cell *matHeaderCellDef> Position </th>
-                            <td mat-cell *matCellDef="let element; let i = index"> {{ i + 1 }} </td>
-                        </ng-container>
+                                    <ng-container matColumnDef="score">
+                                        <th mat-header-cell *matHeaderCellDef>{{ item.unit }}</th>
+                                        <td mat-cell *matCellDef="let element"> {{ element.score }} </td>
+                                    </ng-container>
 
-                        <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef> Username </th>
-                            <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
-                        </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="['position', 'name', 'score']"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: ['position', 'name', 'score'];"></tr>
+                                </table>
+                            </mat-tab>
+                            <mat-tab label="Semanal">
+                                <table mat-table [dataSource]="item.ranking">
+                                    <ng-container matColumnDef="position">
+                                        <th mat-header-cell *matHeaderCellDef> Posição </th>
+                                        <td mat-cell *matCellDef="let element; let i = index"> {{ i + 1 }} </td>
+                                    </ng-container>
 
-                        <ng-container matColumnDef="score">
-                            <th mat-header-cell *matHeaderCellDef> Score </th>
-                            <td mat-cell *matCellDef="let element"> {{ element.score }} </td>
-                        </ng-container>
+                                    <ng-container matColumnDef="name">
+                                        <th mat-header-cell *matHeaderCellDef> Usuário </th>
+                                        <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+                                    </ng-container>
 
-                        <tr mat-header-row *matHeaderRowDef="['position', 'name', 'score']"></tr>
-                        <tr mat-row *matRowDef="let row; columns: ['position', 'name', 'score'];"></tr>
+                                    <ng-container matColumnDef="score">
+                                        <th mat-header-cell *matHeaderCellDef>{{ item.unit }}</th>
+                                        <td mat-cell *matCellDef="let element"> {{ element.score }} </td>
+                                    </ng-container>
 
-                    </table>
-                </div>
-            </mat-card>
+                                    <tr mat-header-row *matHeaderRowDef="['position', 'name', 'score']"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: ['position', 'name', 'score'];"></tr>
+                                </table>
+                            </mat-tab>
+                            <mat-tab label="Todos os tempos">
+                                <table mat-table [dataSource]="item.ranking">
+                                    <ng-container matColumnDef="position">
+                                        <th mat-header-cell *matHeaderCellDef> Posição </th>
+                                        <td mat-cell *matCellDef="let element; let i = index"> {{ i + 1 }} </td>
+                                    </ng-container>
 
+                                    <ng-container matColumnDef="name">
+                                        <th mat-header-cell *matHeaderCellDef> Usuário </th>
+                                        <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+                                    </ng-container>
 
-            <!-- Placeholder Charts -->
-            <div class="flex flex-wrap gap-4 mt-4">
-                <mat-card class="flex-1 min-w-[300px] h-[300px] flex items-center justify-center">
-                    Top 10 Score Distribution Chart Here
+                                    <ng-container matColumnDef="score">
+                                        <th mat-header-cell *matHeaderCellDef>{{ item.unit }}</th>
+                                        <td mat-cell *matCellDef="let element"> {{ element.score }} </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="['position', 'name', 'score']"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: ['position', 'name', 'score'];"></tr>
+                                </table>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </mat-card-content>
                 </mat-card>
-                <mat-card class="flex-1 min-w-[300px] h-[300px] flex items-center justify-center">
-                    Performance Timeline Chart Here
-                </mat-card>
-                <mat-card class="w-full h-[300px] flex items-center justify-center">
-                    Metric Comparison Chart Here
-                </mat-card>
-            </div>
+                <br>
+            </ng-template>
         </div>
+
     </mat-sidenav-content>
 </mat-sidenav-container>

@@ -1,10 +1,86 @@
 @use "tailwind-import.scss";
+@use '@angular/material' as mat;
+
+$white-color: #ffffff;
+$red-color: #ff6347;
+$green-color: #00e68a;
+$matrix-green-color: #42c920;
+
+$primary-color: #1F1F3D;
+$primary-color-hover: #21213f;
+
+$secondary-color: #282845;
+$tertiary-color: #535374;
+
+$shadow-dark-color: #00000080;
+
+$container-primary-bg-color: #282845;
+
+$label-light-color: #cccccc;
+
+$input-bg-color: #514769;
+
+$input-font-active-color: #ffffff;
+
+$input-font-placeholder-color: #aaaaaa;
+
+$button-green-color: #00FF9C;
+$button-hover-green-color: #00e68a;
+$button-click-green-color: #0ca065;
+
+$button-red-color: #ff6347;
+$button-hover-red-color: #e05137;
+$button-click-red-color: #c14530;
+
+$button-font-dark-color: #282845;
+$button-font-light-color: #ffffff;
 
 html, body {
   height: 100%;
 }
 
-body {
+* {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  padding: 0;
+  box-sizing: border-box;
 }
+
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin: 0;
+  color: $white-color;
+  height: 100dvh;
+}
+
+h1, h2, h3 {
+  color: $green-color;
+}
+
+@include mat.sidenav-overrides((
+  container-background-color: $secondary-color,
+  content-background-color: $primary-color,
+));
+
+@include mat.tabs-overrides((
+  active-indicator-color: $green-color,
+  active-focus-indicator-color: $green-color,
+  active-hover-indicator-color: $green-color,
+));
+
+.page-content {
+  padding: 1rem;
+}
+
+@include mat.card-overrides((
+  elevated-container-color: $secondary-color,
+));
+
+@include mat.button-overrides((
+  filled-container-color: $green-color,
+  filled-label-text-color: $secondary-color,
+));
+
+@include mat.table-overrides((
+  background-color: $secondary-color,
+  header-headline-color: white,
+));

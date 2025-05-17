@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/keypressed")
+@RestController
+@RequestMapping("api/keypressed")
 @AllArgsConstructor
 public class KeyPressedController {
 

@@ -57,12 +57,8 @@ h1, h2, h3 {
 }
 
 @include mat.sidenav-overrides((
-  container-background-color: $primary-color,
-  content-background-color: $secondary-color,
-));
-
-@include mat.toolbar-overrides((
-    container-background-color: $secondary-color,
+  container-background-color: $secondary-color,
+  content-background-color: $primary-color,
 ));
 
 @include mat.tabs-overrides((
@@ -72,20 +68,19 @@ h1, h2, h3 {
 ));
 
 .page-content {
-  background-color: $secondary-color;
   padding: 1rem;
 }
 
 @include mat.card-overrides((
-  elevated-container-color: $primary-color,
+  elevated-container-color: $secondary-color,
 ));
 
 @include mat.button-overrides((
   filled-container-color: $green-color,
-  filled-label-text-color: $primary-color,
+  filled-label-text-color: $secondary-color,
 ));
 
 @include mat.table-overrides((
-  background-color: $primary-color,
+  background-color: $secondary-color,
   header-headline-color: white,
 ));

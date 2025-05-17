@@ -10,10 +10,12 @@ import { FormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { PeriodType } from "../utils/enums/PeriodType";
 import { MetricModelGroup } from "../utils/enums/MetricModelGroup";
+import {NgFor, NgForOf} from "@angular/common";
 
 @Component({
     selector: 'app-root',
     imports: [
+        NgForOf, NgFor,
         MatTabsModule,
         MatSidenavModule,
         MatToolbarModule,
@@ -31,12 +33,28 @@ import { MetricModelGroup } from "../utils/enums/MetricModelGroup";
 export class AppComponent {
     selectedRanking: MetricModelGroup = 'keyboard';
     rankings = [
-        { name: 'User A', score: 1200 },
-        { name: 'User B', score: 1150 },
-        { name: 'User C', score: 1100 },
-        { name: 'User D', score: 1000 },
-        { name: 'User E', score: 900 },
-    ];
+        {
+            name: "Distância percorrida com mouse",
+            unit: "metros",
+            ranking: [
+                { name: 'User A', score: 1200 },
+                { name: 'User B', score: 1150 },
+                { name: 'User C', score: 1100 },
+                { name: 'User D', score: 1000 },
+                { name: 'User E', score: 900 },
+            ]
+        }, {
+            name: "Clicks",
+            unit: "clicks",
+            ranking: [
+                { name: 'User A', score: 1200 },
+                { name: 'User B', score: 1150 },
+                { name: 'User C', score: 1100 },
+                { name: 'User D', score: 1000 },
+                { name: 'User E', score: 900 },
+            ]
+        },
+    ]
     period: PeriodType = 'week';
 
     selectRanking(type: MetricModelGroup) {

@@ -7,7 +7,9 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
-import { MatTabsModule} from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
+import { PeriodType } from "../utils/enums/PeriodType";
+import { MetricModelGroup } from "../utils/enums/MetricModelGroup";
 
 @Component({
     selector: 'app-root',
@@ -27,7 +29,7 @@ import { MatTabsModule} from '@angular/material/tabs';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-    selectedRanking: 'keyboard' | 'mouse' | 'behavior' = 'keyboard';
+    selectedRanking: MetricModelGroup = 'keyboard';
     rankings = [
         { name: 'User A', score: 1200 },
         { name: 'User B', score: 1150 },
@@ -35,13 +37,13 @@ export class AppComponent {
         { name: 'User D', score: 1000 },
         { name: 'User E', score: 900 },
     ];
-    period: 'day' | 'week' | 'month' = 'week';
+    period: PeriodType = 'week';
 
-    selectRanking(type: 'keyboard' | 'mouse' | 'behavior') {
+    selectRanking(type: MetricModelGroup) {
         this.selectedRanking = type;
     }
 
-    selectPeriod(p: 'day' | 'week' | 'month') {
+    selectPeriod(p: PeriodType) {
         this.period = p;
     }
 }

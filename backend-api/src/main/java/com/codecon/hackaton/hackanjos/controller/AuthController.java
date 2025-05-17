@@ -26,6 +26,13 @@ public class AuthController {
     private final UserService userService;
     private static final String REDIRECT_URL = "redirectUrl";
 
+    /**
+     * Redireciona o usuário para a URL de sucesso após autenticação via OAuth2.
+     * @param oAuth2User
+     * @param request
+     * @return
+     * Redireciona para a URL de sucesso ou para a página de erro se o usuário não estiver autenticado.
+     */
     @GetMapping("/success")
     public RedirectView success(@AuthenticationPrincipal OAuth2User oAuth2User, HttpServletRequest request) {
         try {
@@ -50,6 +57,12 @@ public class AuthController {
         }
     }
 
+    /**
+     * Retorna o usuário autenticado via OAuth2.
+     *
+     * @param oAuth2User Usuário autenticado pelo Spring Security.
+     * @return ResponseEntity com informações do usuário ou erro se não autenticado.
+     */
     @GetMapping("/user")
     public ResponseEntity<Map<String, Object>> getCurrentUser(@AuthenticationPrincipal OAuth2User oAuth2User) {
         if (oAuth2User == null) {

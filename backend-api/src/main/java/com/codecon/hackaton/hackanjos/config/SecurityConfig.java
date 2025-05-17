@@ -25,7 +25,7 @@ public class SecurityConfig {
             .cors().and()
             .csrf().disable()
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/oauth2/**", "/login/**", "/swagger-ui/**", "/api-docs/**", "/h2-console/**", "/keypressed/**").permitAll()
+                .requestMatchers("/api/auth/**", "/oauth2/**", "/login/**", "/swagger-ui/**", "/api-docs/**", "/keypressed/**").permitAll()
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2

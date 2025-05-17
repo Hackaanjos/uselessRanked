@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -24,16 +23,25 @@ public class KeyPressedService {
         KeyPressed keyPressed = keyPressedRepository.getKeyPressedByKeyCodeAndUserIdAndEventDateBetween(keyCode, user.getId(), localStartDateTime, localEndDateTime);
 
         if (keyPressed == null) {
-            keyPressed = new KeyPressed();
-            keyPressed.setKeyCode(keyCode);
-            keyPressed.setEventCounter(eventCounter);
-            keyPressed.setEventDate(LocalDateTime.now());
-            keyPressed.setUser(user);
-            keyPressedRepository.save(keyPressed);
+            save(keyCode, eventCounter, user);
         } else {
-            keyPressed.setEventCounter(keyPressed.getEventCounter() + eventCounter);
-            keyPressed.setEventDate(LocalDateTime.now());
-            keyPressedRepository.save(keyPressed);
+            update(keyPressed, eventCounter);
         }
+    }
+
+    private void save(String keyCode, Long eventCounter, User user) {
+        KeyPressed keyPressed;
+        keyPressed = new KeyPressed();
+        keyPressed.setKeyCode(keyCode);
+        keyPressed.setEventCounter(eventCounter);
+        keyPressed.setEventDate(LocalDateTime.now());
+        keyPressed.setUser(user);
+        keyPressedRepository.save(keyPressed);
+    }
+
+    private void update(KeyPressed keyPressed, Long eventCounter) {
+        keyPressed.setEventCounter(keyPressed.getEventCounter() + eventCounter);
+        keyPressed.setEventDate(LocalDateTime.now());
+        keyPressedRepository.save(keyPressed);
     }
 }

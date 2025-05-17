@@ -13,11 +13,8 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Hackaton API")
+                        .title("Useless Ranked API")
                         .version("1.0")
-                        .description("API para o projeto Hackaton")
-                        .contact(new Contact()
-                                .name("Hackaton Team")
-                                .email("contato@hackaton.com")));
+                        .description("API inútil de um rank inútil - Codecon Universe"));
     }
-} 
+}

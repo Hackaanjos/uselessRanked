@@ -1,12 +1,7 @@
 import { Observable } from 'rxjs';
-
-export interface UserRanking {
-    name: string;
-    score: number;
-}
+import { PaginatedList } from "../models/PaginatedList";
+import { UserRanking } from "../models/UserRanking";
 
 export interface RankingServiceInterface {
-
-    getKeyRanking(key: string): Observable<UserRanking[]>;
-
+    getKeyRanking(key: string): Observable<PaginatedList<UserRanking>>;
 }

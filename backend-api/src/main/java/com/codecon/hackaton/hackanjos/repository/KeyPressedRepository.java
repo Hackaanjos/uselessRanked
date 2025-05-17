@@ -19,6 +19,6 @@ public interface KeyPressedRepository extends JpaRepository<KeyPressed, Long> {
     Page<KeyPressed> findAllByKeyCodeOrderByEventCounterDesc(String key, Pageable pageable);
 
     @Query("SELECT new com.codecon.hackaton.hackanjos.dto.reponse.AllKeyPressedResponseDTO(SUM(k.eventCounter), k.user.name, k.user.email) " +
-            "FROM KeyPressed k GROUP BY k.user.name, k.user.email")
+            "FROM KeyPressed k GROUP BY k.user")
     Page<AllKeyPressedResponseDTO> sumEventCounterGroupByUserId(Pageable pageable);
 }

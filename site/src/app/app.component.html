@@ -1,30 +1,30 @@
 <mat-sidenav-container class="h-screen bg-gray-50">
     <mat-sidenav mode="side" opened class="w-64 bg-cyan-600 text-white">
-        <mat-toolbar color="primary">Ranking Types</mat-toolbar>
+        <mat-toolbar color="primary">Useless Ranked</mat-toolbar>
         <mat-nav-list>
             <mat-list-item>
-                <button mat-button class="w-full text-left" (click)="selectRanking('keyboard')">Keyboard</button>
+                <button mat-button class="w-full text-left" (click)="selectRanking('keyboard')">Teclado</button>
             </mat-list-item>
             <mat-list-item>
                 <button mat-button class="w-full text-left" (click)="selectRanking('mouse')">Mouse</button>
             </mat-list-item>
             <mat-list-item>
-                <button mat-button class="w-full text-left" (click)="selectRanking('behavior')">Behavior</button>
+                <button mat-button class="w-full text-left" (click)="selectRanking('behavior')">Comportamento</button>
             </mat-list-item>
         </mat-nav-list>
     </mat-sidenav>
 
     <mat-sidenav-content>
         <mat-toolbar color="accent">
-            <span>{{ selectedRanking }} Ranking</span>
+            <span>Ranques de {{ selectedRanking }}</span>
         </mat-toolbar>
 
         <div class="p-4">
             <!-- Period Selector -->
             <mat-button-toggle-group [(ngModel)]="period" appearance="legacy">
-                <mat-button-toggle value="day">Day</mat-button-toggle>
-                <mat-button-toggle value="week">Week</mat-button-toggle>
-                <mat-button-toggle value="month">Month</mat-button-toggle>
+                <mat-button-toggle value="day">Diario</mat-button-toggle>
+                <mat-button-toggle value="week">Semanal</mat-button-toggle>
+                <mat-button-toggle value="all-time">Todos os tempos</mat-button-toggle>
             </mat-button-toggle-group>
 
             <!-- User Ranking Table -->

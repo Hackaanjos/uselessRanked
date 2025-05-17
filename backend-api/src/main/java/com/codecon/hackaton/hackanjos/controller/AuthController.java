@@ -1,5 +1,10 @@
 package com.codecon.hackaton.hackanjos.controller;
 
+import com.codecon.hackaton.hackanjos.model.User;
+import com.codecon.hackaton.hackanjos.service.UserService;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -11,36 +16,44 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @GetMapping("/login")
-    public ResponseEntity<String> login() {
-        return ResponseEntity.ok("Redirecionando para o login do Google...");
-    }
+    private final UserService userService;
 
     @GetMapping("/success")
-    public ResponseEntity<Map<String, Object>> success(@AuthenticationPrincipal OAuth2User principal) {
-        if (principal == null) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Usuário não autenticado"));
-        }
+    public ResponseEntity<Map<String, Object>> success(@AuthenticationPrincipal OAuth2User oAuth2User) {
+        try {
+            if (oAuth2User == null) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Usuário não autenticado"));
+            }
 
-        return ResponseEntity.ok(Map.of(
-            "email", principal.getAttribute("email"),
-            "name", principal.getAttribute("name"),
-            "picture", principal.getAttribute("picture")
-        ));
+            User user = userService.processOAuth2User(oAuth2User);
+
+            return ResponseEntity.ok(Map.of(
+                "id", user.getId(),
+                "email", user.getEmail(),
+                "name", user.getName(),
+                "picture", user.getPicture()
+            ));
+        } catch (Exception exception) {
+            return ResponseEntity.badRequest().body(Map.of("error", exception.getMessage()));
+        }
     }
 
     @GetMapping("/user")
-    public ResponseEntity<Map<String, Object>> getCurrentUser(@AuthenticationPrincipal OAuth2User principal) {
-        if (principal == null) {
+    public ResponseEntity<Map<String, Object>> getCurrentUser(@AuthenticationPrincipal OAuth2User oAuth2User) {
+        if (oAuth2User == null) {
             return ResponseEntity.badRequest().body(Map.of("error", "Usuário não autenticado"));
         }
 
+        User user = userService.processOAuth2User(oAuth2User);
+
         return ResponseEntity.ok(Map.of(
-            "email", principal.getAttribute("email"),
-            "name", principal.getAttribute("name"),
-            "picture", principal.getAttribute("picture")
+            "id", user.getId(),
+            "email", user.getEmail(),
+            "name", user.getName(),
+            "picture", user.getPicture()
         ));
     }
 }

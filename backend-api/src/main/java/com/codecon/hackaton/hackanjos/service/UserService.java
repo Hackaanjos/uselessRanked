@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
 
-    @Transactional
     public User processOAuth2User(OAuth2User oAuth2User) {
         try {
             if (oAuth2User == null) {

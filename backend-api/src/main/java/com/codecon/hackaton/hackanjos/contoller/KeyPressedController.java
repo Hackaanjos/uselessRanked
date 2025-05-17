@@ -31,6 +31,6 @@ public class KeyPressedController {
             keyPressedService.saveOrUpdateEvent(keyPressedRequestDTO.getKeyCode(), keyPressedRequestDTO.getCount(), user);
         }
 
-        return ResponseEntity.ok("Key pressed events saved successfully");
+        return ResponseEntity.ok("KeyPresseds salvos com sucesso");
     }
 }

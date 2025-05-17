@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -20,12 +21,12 @@ public class MouseClickService {
     public void saveOrUpdateEvent(Long eventCounter, User user) {
         LocalDateTime localStartDateTime = LocalDate.now().atStartOfDay();
         LocalDateTime localEndDateTime = LocalDate.now().atTime(23, 59, 59);
-        MouseClick mouseClick = mouseClickRepository.getMouseClickByUserIdAndEventDateBetween(user.getId(), localStartDateTime, localEndDateTime);
+        Optional<MouseClick> mouseClick = mouseClickRepository.getMouseClickByUserIdAndEventDateBetween(user.getId(), localStartDateTime, localEndDateTime);
 
-        if (mouseClick == null) {
+        if (mouseClick.isEmpty()) {
             save(eventCounter, user);
         } else {
-            update(mouseClick, eventCounter);
+            update(mouseClick.orElse(null), eventCounter);
         }
     }
 

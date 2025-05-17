@@ -6,5 +6,7 @@ export interface UserRanking {
 }
 
 export interface RankingServiceInterface {
-    getRankings(type: string, period: string): Observable<UserRanking[]>;
+
+    getKeyRanking(key: string): Observable<UserRanking[]>;
+
 }

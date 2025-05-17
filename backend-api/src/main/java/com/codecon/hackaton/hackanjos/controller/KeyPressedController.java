@@ -1,5 +1,6 @@
 package com.codecon.hackaton.hackanjos.controller;
 
+import com.codecon.hackaton.hackanjos.dto.reponse.KeyPressedByKeyResponseDTO;
 import com.codecon.hackaton.hackanjos.dto.request.KeyPressedRequestDTO;
 import com.codecon.hackaton.hackanjos.model.User;
 import com.codecon.hackaton.hackanjos.repository.UserRepository;
@@ -7,11 +8,12 @@ import com.codecon.hackaton.hackanjos.service.KeyPressedService;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +34,12 @@ public class KeyPressedController {
         }
 
         return ResponseEntity.ok("KeyPresseds salvos com sucesso");
+    }
+
+    @GetMapping("/{key}")
+    public ResponseEntity<Page<KeyPressedByKeyResponseDTO>> listByKey(
+            @PathVariable String key,
+            @PageableDefault(page = 0, size = 5) Pageable pageable) {
+        return ResponseEntity.ok(keyPressedService.listByKey(key.toUpperCase(), pageable));
     }
 }

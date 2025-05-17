@@ -1,11 +1,14 @@
 package com.codecon.hackaton.hackanjos.service;
 
+import com.codecon.hackaton.hackanjos.dto.reponse.KeyPressedByKeyResponseDTO;
 import com.codecon.hackaton.hackanjos.model.KeyPressed;
 import com.codecon.hackaton.hackanjos.model.User;
 import com.codecon.hackaton.hackanjos.repository.KeyPressedRepository;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -29,9 +32,14 @@ public class KeyPressedService {
         }
     }
 
+    public Page<KeyPressedByKeyResponseDTO> listByKey(String key, Pageable pageable) {
+        return keyPressedRepository
+                .findAllByKeyCodeOrderByEventCounterDesc(key, pageable)
+                .map(KeyPressedByKeyResponseDTO::new);
+    }
+
     private void save(String keyCode, Long eventCounter, User user) {
-        KeyPressed keyPressed;
-        keyPressed = new KeyPressed();
+        KeyPressed keyPressed = new KeyPressed();
         keyPressed.setKeyCode(keyCode);
         keyPressed.setEventCounter(eventCounter);
         keyPressed.setEventDate(LocalDateTime.now());

@@ -1,4 +1,4 @@
-package com.codecon.hackaton.hackanjos.contoller;
+package com.codecon.hackaton.hackanjos.controller;
 
 import com.codecon.hackaton.hackanjos.dto.request.KeyPressedRequestDTO;
 import com.codecon.hackaton.hackanjos.model.User;

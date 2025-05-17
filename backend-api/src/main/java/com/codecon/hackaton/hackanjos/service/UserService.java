@@ -31,6 +31,11 @@ public class UserService {
                 throw new IllegalArgumentException("Email e Google ID são obrigatórios");
             }
 
+            User user = userRepository.findByEmail(email).orElse(null);
+            if (user != null) {
+                return save(oAuth2User);
+            }
+
             return userRepository.findByEmail(email)
                     .map(existingUser -> {
                         existingUser.setName(name);
@@ -49,5 +54,16 @@ public class UserService {
         } catch (Exception exception) {
             throw new RuntimeException("Erro ao processar usuário OAuth2: " + exception.getMessage(), exception);
         }
+    }
+
+    private User save(OAuth2User oAuth2User) {
+        User user = new User();
+
+        user.setEmail(oAuth2User.getAttribute("email"));
+        user.setName(oAuth2User.getAttribute("name"));
+        user.setPicture(oAuth2User.getAttribute("picture"));
+        user.setGoogleId(oAuth2User.getAttribute("sub"));
+
+        return user;
     }
 }

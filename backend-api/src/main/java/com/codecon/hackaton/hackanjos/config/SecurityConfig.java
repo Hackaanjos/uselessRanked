@@ -18,8 +18,6 @@ import java.util.Arrays;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private static final String FRONTEND_URL = "http://localhost:4200";
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
@@ -35,18 +33,25 @@ public class SecurityConfig {
             )
             .exceptionHandling(exception -> exception
                 .accessDeniedHandler((request, response, accessDeniedException) -> {
-                    response.sendRedirect(FRONTEND_URL + "/error?message=Acesso negado");
+                    String callback = request.getParameter("callback");
+                    response.sendRedirect(callback + "?error=Acesso negado");
                 })
                 .authenticationEntryPoint((request, response, authException) -> {
-                    response.sendRedirect(FRONTEND_URL + "/error?message=Não autorizado");
+                    String callback = request.getParameter("callback");
+                    response.sendRedirect(callback + "?error=Não autorizado");
                 })
                 .defaultAuthenticationEntryPointFor(
-                        (request, response, authException) -> response.sendRedirect(FRONTEND_URL + "/error?message=Não encontrado"),
+                        (request, response, authException) -> {
+                            String callback = request.getParameter("callback");
+                            response.sendRedirect(callback + "?error=Não encontrado");
+                        },
                         request -> true
                 )
             )
             .oauth2Login(oauth2 -> oauth2
-                .defaultSuccessUrl("/api/auth/success", true)
+                .loginPage("/oauth2/authorization/google")
+                .defaultSuccessUrl("/api/auth/success")
+                .failureUrl("/api/auth/error")
             )
             .requestCache(cache -> cache
                 .requestCache(requestCache)
@@ -59,7 +64,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(FRONTEND_URL));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);

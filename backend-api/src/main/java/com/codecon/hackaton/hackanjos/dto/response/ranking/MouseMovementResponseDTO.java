@@ -14,4 +14,7 @@ public class MouseMovementResponseDTO {
     String userName;
 
     String userEmail;
+
+    String userPicture;
 }
+

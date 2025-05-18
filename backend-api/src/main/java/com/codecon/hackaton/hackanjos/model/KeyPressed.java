@@ -19,9 +19,8 @@ public class KeyPressed {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Size(min=1, max=1)
     @Column(nullable = false)
-    String keyCode;
+    Long keyCode;
 
     @Column(nullable = false)
     Long eventCounter;

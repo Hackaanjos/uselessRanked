@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class KeyPressedRequestDTO {
 
-    String keyCode;
+    Long keyCode;
 
     Long count;
 }

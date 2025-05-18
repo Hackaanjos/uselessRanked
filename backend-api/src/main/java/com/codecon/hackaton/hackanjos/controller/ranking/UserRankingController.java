@@ -69,6 +69,7 @@ public class UserRankingController {
         UserRankDTO userRankDTO = UserRankDTO.builder()
                 .userName(user.getName())
                 .userEmail(user.getEmail())
+                .userPicture(user.getPicture())
                 .keyPressCount(totalKeyPresses)
                 .mouseClickCount(totalMouseClicks)
                 .mouseMovementDistance(totalMouseDistance)

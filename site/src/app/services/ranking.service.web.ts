@@ -14,13 +14,13 @@ export class RankingServiceWeb implements RankingServiceInterface {
 
   constructor(private http: HttpRequestManager) {}
 
-  public getSingleKeyRanking(key: string, periodType: PeriodType): Observable<PaginatedList<UserRanking>> {
-    return this.http.get<PaginatedList<UserRanking>>(`ranking/keypressed/${key}/findByKey/${getEnumKeyByValue(PeriodType, periodType)}`);
+  public getSingleKeyRanking(keyCode: number, periodType: PeriodType): Observable<PaginatedList<UserRanking>> {
+    return this.http.get<PaginatedList<UserRanking>>(`ranking/keypressed/${keyCode}/findByKey/${getEnumKeyByValue(PeriodType, periodType)}`);
   }
 
-  public listSingleKeyRankings(key: string): Record<PeriodType, UserRanking[]> {
+  public listSingleKeyRankings(keyCode: number): Record<PeriodType, UserRanking[]> {
     return this.defaultList((periodType: PeriodType) => {
-      return this.getSingleKeyRanking(key, periodType)
+      return this.getSingleKeyRanking(keyCode, periodType)
     });
   }
 

@@ -14,4 +14,6 @@ public class MouseClickDTO {
     String userName;
 
     String userEmail;
+
+    String userPicture;
 }

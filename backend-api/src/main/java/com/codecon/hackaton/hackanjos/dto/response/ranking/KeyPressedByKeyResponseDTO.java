@@ -19,9 +19,12 @@ public class KeyPressedByKeyResponseDTO {
 
     String userEmail;
 
+    String userPicture;
+
     public KeyPressedByKeyResponseDTO(KeyPressed keyPressed) {
         this.eventCounter = keyPressed.getEventCounter();
         this.userName = keyPressed.getUser().getName();
         this.userEmail = keyPressed.getUser().getEmail();
+        this.userPicture = keyPressed.getUser().getPicture();
     }
 }

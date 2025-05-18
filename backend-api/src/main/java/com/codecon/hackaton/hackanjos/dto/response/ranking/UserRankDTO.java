@@ -8,6 +8,7 @@ import lombok.Data;
 public class UserRankDTO {
     private String userName;
     private String userEmail;
+    private String userPicture;
     private Long keyPressCount;
     private Long mouseClickCount;
     private Long mouseMovementDistance;

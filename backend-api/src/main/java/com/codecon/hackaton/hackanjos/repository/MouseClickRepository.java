@@ -17,7 +17,7 @@ public interface MouseClickRepository extends JpaRepository<MouseClick, Long> {
 
     MouseClick getMouseClickByUserIdAndEventDateBetween(Long userId, LocalDateTime localStartDateTime, LocalDateTime localEndDateTime);
 
-    @Query("SELECT new com.codecon.hackaton.hackanjos.dto.response.ranking.MouseClickDTO(SUM(m.eventCounter), m.user.name, m.user.email) " +
+    @Query("SELECT new com.codecon.hackaton.hackanjos.dto.response.ranking.MouseClickDTO(SUM(m.eventCounter), m.user.name, m.user.email, m.user.picture) " +
             "FROM MouseClick m WHERE m.eventDate > :localDateTime GROUP BY m.user ORDER BY SUM(m.eventCounter) DESC")
     Page<MouseClickDTO> sumEventCounterGroupByUserId(LocalDateTime localDateTime, Pageable pageable);
 }

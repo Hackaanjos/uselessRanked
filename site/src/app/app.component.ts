@@ -65,7 +65,10 @@ export class AppComponent implements OnInit {
   onOptionSelected(event: any) {
     this.selectedKey = event.option.value;
     if (this.metricModelGroup === MetricModelGroup.KEYBOARD) {
-      const singleKeysData = this.rankingService.listSingleKeyRankings(this.selectedKey);
+
+      const keyCode: number = this.selectedKey.toUpperCase().charCodeAt(0);
+      const singleKeysData = this.rankingService.listSingleKeyRankings(keyCode);
+
       const specificKeyRanking = this.rankingList.find(r => r.name === 'specificKeyPressed');
       if (specificKeyRanking) {
         specificKeyRanking.description = `Tecla "${this.selectedKey}" pressionada`;
@@ -102,7 +105,8 @@ export class AppComponent implements OnInit {
     this.rankingList = []; // Limpa a lista antes de adicionar novos rankings
 
     if (this.metricModelGroup == MetricModelGroup.KEYBOARD) {
-      const singleKeysData = this.rankingService.listSingleKeyRankings(this.selectedKey);
+      const keyCode: number = this.selectedKey.toUpperCase().charCodeAt(0);
+      const singleKeysData = this.rankingService.listSingleKeyRankings(keyCode);
       const singleKeysRanking: Ranking = new Ranking(`Tecla "${this.selectedKey}" pressionada`, "specificKeyPressed", "quantidade", singleKeysData);
       this.rankingList.push(singleKeysRanking)
 

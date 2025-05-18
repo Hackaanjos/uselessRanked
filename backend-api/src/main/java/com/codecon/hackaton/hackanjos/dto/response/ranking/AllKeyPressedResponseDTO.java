@@ -16,4 +16,7 @@ public class AllKeyPressedResponseDTO {
     String userName;
 
     String userEmail;
+
+    String userPicture;
+
 }

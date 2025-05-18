@@ -6,7 +6,7 @@ API Backend que é responsável por guardar as informações dos clientes.
 
 * Spring Boot
 * Java 21
-* Mysql
+* MySQL
 * Gradle
 
 ## Instalação

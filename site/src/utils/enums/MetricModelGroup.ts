@@ -1,1 +1,4 @@
-export type MetricModelGroup = 'keyboard' | 'mouse' | 'behavior';
+export enum MetricModelGroup {
+  KEYBOARD="Teclado",
+  MOUSE="Mouse",
+}

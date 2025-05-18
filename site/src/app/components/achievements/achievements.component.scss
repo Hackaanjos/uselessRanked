@@ -1,0 +1,44 @@
+.achievements-container {
+    padding: 20px;
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.achievement-card {
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+        transform: translateY(-5px);
+    }
+
+    mat-card-header {
+        margin-bottom: 16px;
+    }
+
+    mat-card-content {
+        min-height: 60px;
+    }
+
+    mat-card-actions {
+        display: flex;
+        justify-content: flex-end;
+        padding: 8px;
+    }
+
+    .mat-icon {
+        &.completed {
+            color: #4CAF50;
+        }
+    }
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 20px;
+} 

@@ -42,12 +42,20 @@ export class AppComponent implements OnInit {
     constructor(private rankingService: RankingServiceWeb) {}
 
     ngOnInit(): void {
-        this.rankingService.getKeyRanking("1").subscribe(data => {
+        this.rankingService.getAllKeysRanking().subscribe(data => {
+            const list: PaginatedList<UserRanking> = data;
+            const ranking: Ranking = new Ranking("Caracteres precionados", "quantidade", list.content);
+
+            this.rankingList.push(ranking)
+        });
+
+        this.rankingService.getSingleKeyRanking("1").subscribe(data => {
             const list: PaginatedList<UserRanking> = data;
             const ranking: Ranking = new Ranking("Caractere precionado", "quantidade", list.content);
 
             this.rankingList.push(ranking)
         });
+
     }
 
     selectRanking(type: MetricModelGroup) {

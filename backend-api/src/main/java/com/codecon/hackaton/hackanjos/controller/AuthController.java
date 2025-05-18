@@ -44,7 +44,7 @@ public class AuthController {
             @AuthenticationPrincipal OAuth2User oAuth2User,
             HttpServletRequest request,
             @RequestParam(required = false) String callback) {
-        String callbackUrl = getCallbackUrl(callback, request);
+        String callbackUrl = FRONTEND_URL;
 
         try {
             if (oAuth2User == null) {
@@ -96,7 +96,7 @@ public class AuthController {
             HttpServletResponse response,
             @RequestParam(required = false) String callback) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String callbackUrl = getCallbackUrl(callback, request);
+        String callbackUrl = FRONTEND_URL;
 
         if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
             return new RedirectView(callbackUrl + "?error=Usuário não está autenticado");

@@ -30,12 +30,6 @@ public class UserRankingController {
     private final MouseClickRepository mouseClickRepository;
     private final UserRepository userRepository;
 
-    @GetMapping
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<UserRankDTO> getUserMetricsDefault(@AuthenticationPrincipal OAuth2User oAuth2User) {
-        return getUserMetrics(oAuth2User, IntervalFilter.DAY.toString());
-    }
-
     @GetMapping("/{intervalFilterString}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserRankDTO> getUserMetrics(@AuthenticationPrincipal OAuth2User oAuth2User, @PathVariable String intervalFilterString) {

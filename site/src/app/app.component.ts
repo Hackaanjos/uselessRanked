@@ -47,11 +47,6 @@ export class AppComponent implements OnInit {
     this.metricModelGroup = metricModelGroup;
     this.rankingList = [];
     this.loadRankings();
-
-    console.log(PeriodType.MONTH)
-    console.log(PeriodType.MONTH.toString())
-    console.log(Object.values(PeriodType.MONTH))
-
   }
 
   private loadRankings(): void {

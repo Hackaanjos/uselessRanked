@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
@@ -10,7 +10,11 @@ import { FormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { PeriodType } from "../utils/enums/PeriodType";
 import { MetricModelGroup } from "../utils/enums/MetricModelGroup";
-import {NgFor, NgForOf} from "@angular/common";
+import { NgFor, NgForOf } from "@angular/common";
+import { RankingServiceWeb } from "./services/ranking.service.web";
+import { PaginatedList } from "./models/PaginatedList";
+import { UserRanking } from "./models/UserRanking";
+import { Ranking } from "./models/Ranking";
 
 @Component({
     selector: 'app-root',
@@ -30,32 +34,29 @@ import {NgFor, NgForOf} from "@angular/common";
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     selectedRanking: MetricModelGroup = 'keyboard';
-    rankings = [
-        {
-            name: "Distância percorrida com mouse",
-            unit: "metros",
-            ranking: [
-                { name: 'User A', score: 1200 },
-                { name: 'User B', score: 1150 },
-                { name: 'User C', score: 1100 },
-                { name: 'User D', score: 1000 },
-                { name: 'User E', score: 900 },
-            ]
-        }, {
-            name: "Clicks",
-            unit: "clicks",
-            ranking: [
-                { name: 'User A', score: 1200 },
-                { name: 'User B', score: 1150 },
-                { name: 'User C', score: 1100 },
-                { name: 'User D', score: 1000 },
-                { name: 'User E', score: 900 },
-            ]
-        },
-    ]
     period: PeriodType = 'week';
+    rankingList: Array<Ranking> = [];
+
+    constructor(private rankingService: RankingServiceWeb) {}
+
+    ngOnInit(): void {
+        this.rankingService.getAllKeysRanking().subscribe(data => {
+            const list: PaginatedList<UserRanking> = data;
+            const ranking: Ranking = new Ranking("Caracteres pressionados", "quantidade", list.content);
+
+            this.rankingList.push(ranking)
+        });
+
+        this.rankingService.getSingleKeyRanking("1").subscribe(data => {
+            const list: PaginatedList<UserRanking> = data;
+            const ranking: Ranking = new Ranking("Caractere pressionado", "quantidade", list.content);
+
+            this.rankingList.push(ranking)
+        });
+
+    }
 
     selectRanking(type: MetricModelGroup) {
         this.selectedRanking = type;

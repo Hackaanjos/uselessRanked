@@ -34,15 +34,16 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-
   metricModelGroup: MetricModelGroup = MetricModelGroup.KEYBOARD;
   rankingList: Array<Ranking> = [];
-  isLoggedIn$ = this.authService.isLoggedIn$;
+  isLoggedIn$;
 
   constructor(
     private rankingService: RankingServiceWeb,
     private authService: AuthService
-  ) {}
+  ) {
+    this.isLoggedIn$ = this.authService.isLoggedIn$;
+  }
 
   ngOnInit(): void {
     this.loadRankings();

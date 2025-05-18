@@ -5,6 +5,7 @@ import com.codecon.hackaton.hackanjos.model.User;
 import com.codecon.hackaton.hackanjos.model.enums.IntervalFilter;
 import com.codecon.hackaton.hackanjos.repository.KeyPressedRepository;
 import com.codecon.hackaton.hackanjos.repository.MouseClickRepository;
+import com.codecon.hackaton.hackanjos.repository.MouseMovementRepository;
 import com.codecon.hackaton.hackanjos.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class UserRankingController {
 
     private final KeyPressedRepository keyPressedRepository;
     private final MouseClickRepository mouseClickRepository;
+    private final MouseMovementRepository mouseMovementRepository;
     private final UserRepository userRepository;
 
     @GetMapping("/{intervalFilterString}")
@@ -57,11 +59,19 @@ public class UserRankingController {
                 .mapToLong(mc -> mc.getEventCounter())
                 .sum();
 
+        Long totalMouseDistance = mouseMovementRepository.findAll().stream()
+                .filter(mc -> mc.getUser().getId().equals(user.getId()) &&
+                        mc.getEventDate().isAfter(startDateTime) &&
+                        mc.getEventDate().isBefore(endDateTime))
+                .mapToLong(mc -> mc.getDistance())
+                .sum();
+
         UserRankDTO userRankDTO = UserRankDTO.builder()
                 .userName(user.getName())
                 .userEmail(user.getEmail())
                 .keyPressCount(totalKeyPresses)
                 .mouseClickCount(totalMouseClicks)
+                .mouseMovementDistance(totalMouseDistance)
                 .build();
 
         return ResponseEntity.ok(userRankDTO);

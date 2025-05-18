@@ -10,4 +10,5 @@ public class UserRankDTO {
     private String userEmail;
     private Long keyPressCount;
     private Long mouseClickCount;
-} 
+    private Long mouseMovementDistance;
+}

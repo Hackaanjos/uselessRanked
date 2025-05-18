@@ -3,6 +3,8 @@ import path from 'path';
 import { StringUtils } from '../../utils/StringUtils';
 import { spawn, IPty } from 'node-pty';
 import { app } from 'electron';
+import GkmKeyEvent from './models/GkmKeyEvent';
+import { GkmMouseEvent } from './models/GkmMouseEvent';
 
 export class GkmListener {
     private static instance: GkmListener;
@@ -35,11 +37,29 @@ export class GkmListener {
                 const parts = StringUtils.splitOnce(line, ':');
                 if (!parts || parts.length < 2) continue;
 
-                const [eventType, eventData] = parts;
+                const eventType = parts[0]
 
-                console.log(`Received event: ${eventType} - ${eventData}`);
+                switch (eventType) {
+                    case 'keyboard':
+                        const keyEvent: GkmKeyEvent = JSON.parse(parts[1]!.toString());
+                        this.events.emit(`keyboard:${keyEvent.eventType}`, keyEvent);
+                        break;
+                    case 'mouse':
+                        const mouseEvent: GkmMouseEvent = JSON.parse(parts[1]!.toString());
+                        this.events.emit(`mouse:${mouseEvent.eventType}`, mouseEvent);
+                        break;
+                }
+
             }
         });
+    }
+
+    public onKeyPressed(callback: (event: GkmKeyEvent) => void): void {
+        this.events.on('keyboard:PRESSED', callback);
+    }
+
+    public onMouseClicked(callback: (event: GkmMouseEvent) => void): void {
+        this.events.on('mouse:CLICKED', callback);
     }
 
     public stop(): void {

@@ -1,9 +1,13 @@
 package com.codecon.hackaton.hackanjos.service;
 
+import com.codecon.hackaton.hackanjos.dto.response.ranking.MouseMovementResponseDTO;
 import com.codecon.hackaton.hackanjos.model.MouseMovement;
 import com.codecon.hackaton.hackanjos.model.User;
+import com.codecon.hackaton.hackanjos.model.enums.IntervalFilter;
 import com.codecon.hackaton.hackanjos.repository.MouseMovementRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,6 +29,12 @@ public class MouseMovementService {
          } else {
                 update(mouseMovement, distance);
          }
+    }
+
+    public Page<MouseMovementResponseDTO> listAll(IntervalFilter intervalFilter, Pageable pageable) {
+        LocalDateTime localDateTime = IntervalFilter.getLocalDateTimeByIntervalFilter(intervalFilter);
+
+        return mouseMovementRepository.sumDistanceGroupByUserId(localDateTime, pageable);
     }
 
     private void save(Long distance, User user) {

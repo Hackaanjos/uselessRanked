@@ -8,8 +8,9 @@
     "start:angular:dev": "cd ../site && ng serve --configuration=electron-dev --port 4200",
     "start:electron:dev": "wait-on tcp:4200 && electron-forge start",
     "start": "concurrently \"npm run start:angular:dev\" \"npm run start:electron:dev\"",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
+    "make:angular:production": "cd ../site && ng build --configuration=electron-prod --output-path=../useless-ranked-desktop/web",
+    "package": "npm run make:angular:production && MAKE_PROD=true electron-forge package",
+    "make": "npm run make:angular:production && MAKE_PROD=true electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx ."
   },

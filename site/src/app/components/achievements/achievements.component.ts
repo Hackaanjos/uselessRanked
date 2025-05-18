@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { NgFor } from '@angular/common';
+import { AchievementsService } from '../../services/achievements.service';
+import { Achievement } from '../../models/Achievement';
 
 @Component({
   selector: 'app-achievements',
@@ -14,26 +16,27 @@ import { NgFor } from '@angular/common';
   templateUrl: './achievements.component.html',
   styleUrls: ['./achievements.component.scss']
 })
-export class AchievementsComponent {
-  // Placeholder for achievements data
-  achievements = [
-    {
-      title: 'Iniciante',
-      description: 'Faça seu primeiro registro',
-      completed: false,
-      icon: 'star_border'
-    },
-    {
-      title: 'Dedicado',
-      description: 'Registre por 7 dias seguidos',
-      completed: false,
-      icon: 'calendar_today'
-    },
-    {
-      title: 'Mestre do Teclado',
-      description: 'Registre mais de 1000 teclas',
-      completed: false,
-      icon: 'keyboard'
-    }
-  ];
+export class AchievementsComponent implements OnInit {
+  achievementsList: Achievement[] = [];
+
+  constructor(private achievementsService: AchievementsService) {}
+
+  ngOnInit() {
+    this.loadAchievements();
+  }
+
+  private loadAchievements(): void {
+    const allAchievements = this.achievementsService.getUserAchievements();
+    
+    allAchievements.subscribe({
+      next: (achievements) => {
+        this.achievementsList = achievements;
+        console.log('Achievements loaded:', achievements);
+      },
+      error: (error) => {
+        console.error('Error loading achievements:', error);
+        this.achievementsList = []; // Limpa a lista em caso de erro
+      }
+    });
+  }
 } 

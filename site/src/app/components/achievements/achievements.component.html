@@ -1,0 +1,22 @@
+<div class="achievements-container">
+    <h2 class="page-title">Conquistas</h2>
+    
+    <div class="achievements-grid">
+        <mat-card *ngFor="let achievement of achievementsList" class="achievement-card">
+            <mat-card-header>
+                <mat-icon mat-card-avatar>{{achievement.icon}}</mat-icon>
+                <mat-card-title>{{achievement.name}}</mat-card-title>
+            </mat-card-header>
+            
+            <mat-card-content>
+                <p>{{achievement.description}}</p>
+            </mat-card-content>
+            
+            <mat-card-actions>
+                <mat-icon [class.completed]="achievement.completed">
+                    {{achievement.completed ? 'check_circle' : 'radio_button_unchecked'}}
+                </mat-icon>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div> 

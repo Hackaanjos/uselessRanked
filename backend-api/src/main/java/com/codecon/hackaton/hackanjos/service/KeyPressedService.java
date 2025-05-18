@@ -58,7 +58,6 @@ public class KeyPressedService {
 
     private void update(KeyPressed keyPressed, Long eventCounter) {
         keyPressed.setEventCounter(keyPressed.getEventCounter() + eventCounter);
-        keyPressed.setEventDate(LocalDateTime.now());
         keyPressedRepository.save(keyPressed);
     }
 }

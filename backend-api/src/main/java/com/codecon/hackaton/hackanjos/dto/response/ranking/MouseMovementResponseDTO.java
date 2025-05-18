@@ -9,7 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class MouseMovementResponseDTO {
 
-    Long distance;
+    Long eventCounter;
 
     String userName;
 

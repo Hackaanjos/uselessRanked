@@ -47,6 +47,11 @@ export class AppComponent implements OnInit {
     this.metricModelGroup = metricModelGroup;
     this.rankingList = [];
     this.loadRankings();
+
+    console.log(PeriodType.MONTH)
+    console.log(PeriodType.MONTH.toString())
+    console.log(Object.values(PeriodType.MONTH))
+
   }
 
   private loadRankings(): void {
@@ -66,6 +71,10 @@ export class AppComponent implements OnInit {
       const mouseClickData = this.rankingService.listMouseClickRankings();
       const mouseClickRanking: Ranking = new Ranking("Clicks de mouse", "clicks", mouseClickData);
       this.rankingList.push(mouseClickRanking)
+
+      const mouseMovementData = this.rankingService.listMouseMovementRankings();
+      const mouseMovementRanking: Ranking = new Ranking("Movemento do mouse", "metros", mouseMovementData);
+      this.rankingList.push(mouseMovementRanking)
 
       return;
     }

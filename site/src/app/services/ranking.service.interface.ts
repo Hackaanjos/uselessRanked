@@ -14,4 +14,7 @@ export interface RankingServiceInterface {
   getMouseClickRanking(periodType: PeriodType): Observable<PaginatedList<UserRanking>>;
   listAllKeysRankings(): Record<PeriodType, UserRanking[]>;
 
+  getMouseMovementRanking(periodType: PeriodType): Observable<PaginatedList<UserRanking>>;
+  listMouseMovementRankings(): Record<PeriodType, UserRanking[]>;
+
 }

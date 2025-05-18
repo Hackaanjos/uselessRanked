@@ -55,10 +55,26 @@
         <div class="page-content">
             <ng-template ngFor let-ranking [ngForOf]="rankingList" let-i="index">
                 <mat-card>
-                    <mat-card-header>
-                        <h3 class="card-title">
-                            {{ ranking.description }} ({{ ranking.unit }})
-                        </h3>
+                    <mat-card-header class="!block">
+                        <div class="flex justify-between items-center">
+                            <h3 class="card-title">
+                                {{ ranking.description }} ({{ ranking.unit }})
+                            </h3>
+                            <mat-form-field class="w-64" *ngIf="ranking.name === 'specificKeyPressed'">
+                                <mat-label>Buscar ranking</mat-label>
+                                <input type="text"
+                                       class="w-full"
+                                       matInput
+                                       [formControl]="searchControl"
+                                       [matAutocomplete]="auto"
+                                       placeholder="Digite caractere específico">
+                                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                        {{option}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
                     </mat-card-header>
                     <mat-card-content>
                         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">

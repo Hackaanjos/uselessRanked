@@ -44,14 +44,14 @@ export class AppComponent implements OnInit {
     ngOnInit(): void {
         this.rankingService.getAllKeysRanking().subscribe(data => {
             const list: PaginatedList<UserRanking> = data;
-            const ranking: Ranking = new Ranking("Caracteres precionados", "quantidade", list.content);
+            const ranking: Ranking = new Ranking("Caracteres pressionados", "quantidade", list.content);
 
             this.rankingList.push(ranking)
         });
 
         this.rankingService.getSingleKeyRanking("1").subscribe(data => {
             const list: PaginatedList<UserRanking> = data;
-            const ranking: Ranking = new Ranking("Caractere precionado", "quantidade", list.content);
+            const ranking: Ranking = new Ranking("Caractere pressionado", "quantidade", list.content);
 
             this.rankingList.push(ranking)
         });

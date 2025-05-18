@@ -55,6 +55,4 @@ public class MouseClickService {
         mouseClick.setEventDate(LocalDateTime.now());
         mouseClickRepository.save(mouseClick);
     }
-
-
 }

@@ -28,12 +28,11 @@ public class CustomErrorController implements ErrorController {
     @RequestMapping("/error")
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<Map<String, Object>> handleError(HttpServletRequest request) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", dateFormat.format(new Date()));
-        body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        body.put("error", "Erro Interno do Servidor");
-        body.put("message", "Ocorreu um erro inesperado");
-        body.put("path", request.getRequestURI());
+        Map<String, Object> body = buildErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Erro Interno do Servidor",
+                "Ocorreu um erro inesperado"
+        );
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
@@ -41,11 +40,11 @@ public class CustomErrorController implements ErrorController {
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Map<String, Object>> handleNoHandlerFoundException(NoHandlerFoundException ex) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", dateFormat.format(new Date()));
-        body.put("status", HttpStatus.NOT_FOUND.value());
-        body.put("error", "Não Encontrado");
-        body.put("message", "O recurso solicitado não foi encontrado");
+        Map<String, Object> body = buildErrorResponse(
+                HttpStatus.NOT_FOUND,
+                "Não Encontrado",
+                "O recurso solicitado não foi encontrado"
+        );
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
@@ -53,11 +52,11 @@ public class CustomErrorController implements ErrorController {
     @GetMapping("/api/error/unauthorized")
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<Map<String, Object>> unauthorized() {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", dateFormat.format(new Date()));
-        body.put("status", HttpStatus.UNAUTHORIZED.value());
-        body.put("error", "Não Autorizado");
-        body.put("message", "Você precisa estar autenticado para acessar este recurso");
+        Map<String, Object> body = buildErrorResponse(
+                HttpStatus.UNAUTHORIZED,
+                "Não Autorizado",
+                "Você precisa estar autenticado para acessar este recurso"
+        );
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
     }
@@ -65,11 +64,11 @@ public class CustomErrorController implements ErrorController {
     @GetMapping("/api/error/forbidden")
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ResponseEntity<Map<String, Object>> forbidden() {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", dateFormat.format(new Date()));
-        body.put("status", HttpStatus.FORBIDDEN.value());
-        body.put("error", "Acesso Negado");
-        body.put("message", "Você não tem permissão para acessar este recurso");
+        Map<String, Object> body = buildErrorResponse(
+                HttpStatus.FORBIDDEN,
+                "Acesso Negado",
+                "Você não tem permissão para acessar este recurso"
+        );
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(body);
     }
@@ -77,12 +76,22 @@ public class CustomErrorController implements ErrorController {
     @GetMapping("/api/error/not-found")
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Map<String, Object>> notFound() {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", dateFormat.format(new Date()));
-        body.put("status", HttpStatus.NOT_FOUND.value());
-        body.put("error", "Não Encontrado");
-        body.put("message", "O recurso solicitado não foi encontrado");
+        Map<String, Object> body = buildErrorResponse(
+                HttpStatus.NOT_FOUND,
+                "Não Encontrado",
+                "O recurso solicitado não foi encontrado"
+        );
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
+    private Map<String, Object> buildErrorResponse(HttpStatus status, String error, String message) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", dateFormat.format(new Date()));
+        body.put("status", status.value());
+        body.put("error", error);
+        body.put("message", message);
+
+        return body;
     }
 }

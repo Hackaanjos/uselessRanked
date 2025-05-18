@@ -1,42 +1,66 @@
-import { session } from "electron";
+import { MouseClickEvent } from "../models/MouseClickEvent";
 import { KeyboardEvent } from "../models/KeyboardEvent";
 import { KeyPressedManager } from "../shared/manager/KeyPressedManager";
+import { CookieService } from "../shared/service/CookieService";
+import { MouseClickManager } from "../shared/manager/MouseClickManager";
 
 async function syncTask(): Promise<void> {
+  try {
+    if (await CookieService.getInstance().getSessionCookie() == null) {
+      scheduleSyncTask();
+      return;
+    }
 
-    const cookies = await session.defaultSession.cookies.get({ name: 'JSESSIONID' })
+    await syncKeyboardEvents();
+    await syncMouseClickEvents();
+  } catch (error) {
+  }
 
-    syncKeyboardEvents();
-
-    scheduleSyncTask();
+  scheduleSyncTask();
 }
 
 async function syncKeyboardEvents(): Promise<void> {
-    const keyboardEvents = await KeyboardEvent.findAll({
-        order: [['id', 'ASC']],
-        limit: 50,
-    })
+  const keyboardEvents = await KeyboardEvent.findAll({
+    order: [['id', 'ASC']],
+    limit: 100,
+  })
 
-    if (keyboardEvents.length === 0) return;
+  if (keyboardEvents.length === 0) return;
 
-    await KeyPressedManager.getInstance().sendKeyPressed(keyboardEvents);
+  await KeyPressedManager.getInstance().sendKeyPressed(keyboardEvents);
 
+  const idsToDelete = keyboardEvents.map(event => event.id);
 
-    //   const response = await fetch('https://sua-api.com/endpoint', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Cookie': `JSESSIONID=${jsessionId}`, 
-    //     },
-    //     body: JSON.stringify(records),
-    //   });
+  await KeyboardEvent.destroy({
+    where: {
+      id: idsToDelete
+    }
+  });
+}
 
+async function syncMouseClickEvents(): Promise<void> {
+  const mouseClickEventList = await MouseClickEvent.findAll({
+    order: [['id', 'ASC']],
+    limit: 100,
+  })
+
+  if (mouseClickEventList.length === 0) return;
+
+  await MouseClickManager.getInstance().sendMouseClick(mouseClickEventList);
+
+  const idsToDelete = mouseClickEventList.map(event => event.id);
+
+  await MouseClickEvent.destroy({
+    where: {
+      id: idsToDelete
+    }
+  });
 }
 
 function scheduleSyncTask() {
-    setTimeout(() => {
-        syncTask();
-    }, 10000);
+  setTimeout(() => {
+    syncTask();
+  }, 10000);
 }
 
 export default syncTask;

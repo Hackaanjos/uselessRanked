@@ -30,8 +30,8 @@
             <div class="space"></div>
 
             <mat-list-item>
-                <button mat-stroked-button class="w-full">
-                    Logar
+                <button mat-stroked-button class="w-full" (click)="handleAuth()">
+                    {{ (isLoggedIn$ | async) ? 'Sair' : 'Logar' }}
                 </button>
             </mat-list-item>
         </mat-nav-list>

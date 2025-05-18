@@ -18,6 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -41,16 +42,20 @@ import { map, startWith } from 'rxjs/operators';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-
   metricModelGroup: MetricModelGroup = MetricModelGroup.KEYBOARD;
   rankingList: Array<Ranking> = [];
-  
+  isLoggedIn$;
+
   searchControl = new FormControl('');
   options: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
   filteredOptions: Observable<string[]>;
   selectedKey: string = ''; // Valor padrão
 
-  constructor(private rankingService: RankingServiceWeb) {
+  constructor(
+    private rankingService: RankingServiceWeb,
+    private authService: AuthService
+  ) {
+    this.isLoggedIn$ = this.authService.isLoggedIn$;
     this.filteredOptions = this.searchControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || '')),
@@ -83,9 +88,19 @@ export class AppComponent implements OnInit {
     this.loadRankings();
   }
 
+  handleAuth(): void {
+    this.authService.isLoggedIn$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this.authService.logout();
+      } else {
+        this.authService.login();
+      }
+    });
+  }
+
   private loadRankings(): void {
     this.rankingList = []; // Limpa a lista antes de adicionar novos rankings
-    
+
     if (this.metricModelGroup == MetricModelGroup.KEYBOARD) {
       const singleKeysData = this.rankingService.listSingleKeyRankings(this.selectedKey);
       const singleKeysRanking: Ranking = new Ranking(`Caractere "${this.selectedKey}" pressionado`, "specificKeyPressed", "quantidade", singleKeysData);

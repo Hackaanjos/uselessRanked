@@ -53,7 +53,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private rankingService: RankingServiceWeb,
-    private authService: AuthService
+    protected readonly authService: AuthService
   ) {
     this.isLoggedIn$ = this.authService.isLoggedIn$;
     this.filteredOptions = this.searchControl.valueChanges.pipe(

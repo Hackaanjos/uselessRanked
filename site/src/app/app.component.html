@@ -26,12 +26,22 @@
                 </mat-list-item>
             </ng-template>
 
-
             <div class="space"></div>
 
+            <mat-list-item *ngIf="authService.currentUser$ | async as user">
+                <div class="flex items-center gap-2 w-full">
+                    <img [src]="user.picture" [alt]="user.name" class="w-8 h-8 rounded-full">
+                    <span class="flex-1">{{ user.name }}</span>
+                </div>
+            </mat-list-item>
+
             <mat-list-item>
-                <button mat-stroked-button class="w-full" (click)="handleAuth()">
-                    {{ (isLoggedIn$ | async) ? 'Sair' : 'Logar' }}
+                <button 
+                    mat-stroked-button 
+                    class="w-full"
+                    (click)="handleAuth()"
+                >
+                    {{ (isLoggedIn$ | async) ? 'Sair' : 'Logar com Google' }}
                 </button>
             </mat-list-item>
         </mat-nav-list>
@@ -43,28 +53,12 @@
         </h2>
 
         <div class="page-content">
-            <ng-template ngFor let-ranking [ngForOf]="rankingList" let-i="index">            
+            <ng-template ngFor let-ranking [ngForOf]="rankingList" let-i="index">
                 <mat-card>
-                    <mat-card-header class="!block">
-                        <div class="flex justify-between items-center">
-                            <h3 class="card-title">
-                                {{ ranking.description }} ({{ ranking.unit }})
-                            </h3>
-                            <mat-form-field class="w-64" *ngIf="ranking.name === 'specificKeyPressed'">
-                                <mat-label>Buscar ranking</mat-label>
-                                <input type="text"
-                                       class="w-full"
-                                       matInput
-                                       [formControl]="searchControl"
-                                       [matAutocomplete]="auto"
-                                       placeholder="Digite caractere específico">
-                                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
-                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                                        {{option}}
-                                    </mat-option>
-                                </mat-autocomplete>
-                            </mat-form-field>
-                        </div>
+                    <mat-card-header>
+                        <h3 class="card-title">
+                            {{ ranking.name }} ({{ ranking.unit }})
+                        </h3>
                     </mat-card-header>
                     <mat-card-content>
                         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
@@ -96,9 +90,6 @@
                 </mat-card>
                 <br>
             </ng-template>
-
-            
         </div>
-
     </mat-sidenav-content>
 </mat-sidenav-container>

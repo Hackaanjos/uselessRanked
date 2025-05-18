@@ -26,15 +26,15 @@ public class MouseClickService {
     public void saveOrUpdateEvent(Long eventCounter, User user) {
         LocalDateTime localStartDateTime = LocalDate.now().atStartOfDay();
         LocalDateTime localEndDateTime = LocalDate.now().atTime(23, 59, 59);
-        Optional<MouseClick> mouseClick = mouseClickRepository.getMouseClickByUserIdAndEventDateBetween(user.getId(), localStartDateTime, localEndDateTime);
+        MouseClick mouseClick = mouseClickRepository.getMouseClickByUserIdAndEventDateBetween(user.getId(), localStartDateTime, localEndDateTime);
 
-        if (mouseClick.isEmpty()) {
+        if (mouseClick == null) {
             MouseClick newMouseClick = save(eventCounter, user);
             achievementService.triggerMouseClickAchievement(user, newMouseClick);
         } else {
-            MouseClick updatedMouseClick = update(mouseClick.orElse(null), eventCounter);
+            mouseClick = update(mouseClick, eventCounter);
 
-            achievementService.triggerMouseClickAchievement(user, updatedMouseClick);
+            achievementService.triggerMouseClickAchievement(user, mouseClick);
         }
     }
 

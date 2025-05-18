@@ -8,11 +8,10 @@ public enum IntervalFilter {
     ALL_TIME;
 
     public static IntervalFilter fromString(String filter) {
-        for (IntervalFilter intervalFilter : IntervalFilter.values()) {
-            if (intervalFilter.name().equalsIgnoreCase(filter)) {
-                return intervalFilter;
-            }
+        try {
+            return IntervalFilter.valueOf(filter.toUpperCase());
+        } catch (Exception e) {
+            return IntervalFilter.ALL_TIME;
         }
-        return IntervalFilter.ALL_TIME;
     }
 }

@@ -53,7 +53,28 @@
               ],
               "outputHashing": "all"
             },
+            "electron-prod": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all",
+              "baseHref": "./"
+            },
             "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            },
+            "electron-dev": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
@@ -72,6 +93,9 @@
             },
             "development": {
               "buildTarget": "site:build:development"
+            },
+            "electron-dev": {
+              "buildTarget": "site:build:electron-dev"
             }
           },
           "defaultConfiguration": "development"

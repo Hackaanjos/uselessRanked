@@ -8,7 +8,7 @@ module.exports = {
     },
     useNullAsDefault: true,
     migrations: {
-      directory: path.resolve(__dirname, 'src/migrations'),
+      directory: path.resolve(__dirname, 'migrations'),
     },
   },
 };

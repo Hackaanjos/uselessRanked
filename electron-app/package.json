@@ -5,11 +5,17 @@
   "description": "My Electron application description",
   "main": "src/main.js",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
+    "start:angular": "cd ../site && ng serve",
+    "start:electron": "cross-env NODE_ENV=development electron-forge start",
+    "start": "concurrently \"npm run start:angular\" \"npm run start:electron\"",
+    "package": "cross-env NODE_ENV=production electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "lint": "echo \"No linting configured\"",
+    "build:angular": "cd ../site && ng build --configuration production --output-path=../electron-app/build/web",
+    "package:electron": "cd ../electron-app && electron-forge package",
+    "make:electron": "cd ../electron-app && electron-forge make",
+    "deploy": "npm run build:angular && npm run make:electron"
   },
   "keywords": [],
   "author": {
@@ -33,6 +39,8 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.8.1",
     "@electron-forge/plugin-fuses": "^7.8.1",
     "@electron/fuses": "^1.8.0",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
     "electron": "^36.2.1"
   }
 }

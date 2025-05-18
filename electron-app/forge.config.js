@@ -1,11 +1,20 @@
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
+const path = require('path');
 
 module.exports = {
-  packagerConfig: {
-    asar: true,
-  },
   rebuildConfig: {},
+  packagerConfig: {
+    icon: path.resolve(__dirname, 'assets/icon'),
+    asar: true,
+    extraResources: [
+      {
+        from: path.resolve(__dirname, 'build/web/borwser'),
+        to: 'web',
+        filter: ['**/*']
+      }
+    ]
+  },
   makers: [
     {
       name: '@electron-forge/maker-squirrel',

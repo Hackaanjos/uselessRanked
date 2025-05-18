@@ -57,6 +57,11 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "electron-dev": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
@@ -69,6 +74,9 @@
             },
             "development": {
               "buildTarget": "site:build:development"
+            },
+            "electron-dev": {
+              "buildTarget": "site:build:electron-dev"
             }
           },
           "defaultConfiguration": "development"

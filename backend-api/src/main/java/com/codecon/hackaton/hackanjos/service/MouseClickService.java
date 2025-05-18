@@ -1,11 +1,15 @@
 package com.codecon.hackaton.hackanjos.service;
 
+import com.codecon.hackaton.hackanjos.dto.reponse.ranking.MouseClickDTO;
 import com.codecon.hackaton.hackanjos.model.MouseClick;
 import com.codecon.hackaton.hackanjos.model.User;
+import com.codecon.hackaton.hackanjos.model.enums.IntervalFilter;
 import com.codecon.hackaton.hackanjos.repository.MouseClickRepository;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -30,6 +34,13 @@ public class MouseClickService {
         }
     }
 
+    public Page<MouseClickDTO> listAll(IntervalFilter intervalFilter, Pageable pageable) {
+        LocalDateTime localDateTime = IntervalFilter.getLocalDateTimeByIntervalFilter(intervalFilter);
+
+        return mouseClickRepository.sumEventCounterGroupByUserId(localDateTime, pageable);
+
+    }
+
     private void save(Long eventCounter, User user) {
         MouseClick mouseClick = new MouseClick();
         mouseClick.setEventCounter(eventCounter);
@@ -44,4 +55,6 @@ public class MouseClickService {
         mouseClick.setEventDate(LocalDateTime.now());
         mouseClickRepository.save(mouseClick);
     }
+
+
 }

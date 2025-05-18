@@ -36,14 +36,14 @@ public class KeyPressedService {
     }
 
     public Page<KeyPressedByKeyResponseDTO> listByKey(String key, IntervalFilter intervalFilter, Pageable pageable) {
-        LocalDateTime localStartDateTime = getLocalDateTimeByIntervalFilter(intervalFilter);
+        LocalDateTime localStartDateTime = IntervalFilter.getLocalDateTimeByIntervalFilter(intervalFilter);
 
         return keyPressedRepository
                 .findAllByKeyCodeAndEventDateAfterOrderByEventCounterDesc(key, localStartDateTime, pageable);
     }
 
     public Page<AllKeyPressedResponseDTO> listAll(IntervalFilter intervalFilter, Pageable pageable) {
-        LocalDateTime localDateTime = getLocalDateTimeByIntervalFilter(intervalFilter);
+        LocalDateTime localDateTime = IntervalFilter.getLocalDateTimeByIntervalFilter(intervalFilter);
 
         return keyPressedRepository.sumEventCounterGroupByUserId(localDateTime, pageable);
     }
@@ -61,14 +61,5 @@ public class KeyPressedService {
         keyPressed.setEventCounter(keyPressed.getEventCounter() + eventCounter);
         keyPressed.setEventDate(LocalDateTime.now());
         keyPressedRepository.save(keyPressed);
-    }
-
-    private static LocalDateTime getLocalDateTimeByIntervalFilter(IntervalFilter intervalFilter) {
-        return switch (intervalFilter) {
-            case DAY -> LocalDate.now().atStartOfDay();
-            case WEEK -> LocalDate.now().minusDays(7).atStartOfDay();
-            case MONTH -> LocalDate.now().minusMonths(1).atStartOfDay();
-            case ALL_TIME -> LocalDate.now().minusYears(100).atStartOfDay();
-        };
     }
 }

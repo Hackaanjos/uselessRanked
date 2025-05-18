@@ -78,6 +78,8 @@ h1, h2, h3 {
 @include mat.button-overrides((
   filled-container-color: $green-color,
   filled-label-text-color: $secondary-color,
+  outlined-outline-color: $green-color,
+  outlined-label-text-color: $green-color,
 ));
 
 @include mat.table-overrides((

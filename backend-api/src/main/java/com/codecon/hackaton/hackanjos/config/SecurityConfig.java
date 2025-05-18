@@ -2,6 +2,7 @@ package com.codecon.hackaton.hackanjos.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
@@ -25,8 +27,21 @@ public class SecurityConfig {
             .cors().and()
             .csrf().disable()
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/oauth2/**", "/login/**", "/swagger-ui/**", "/api-docs/**", "/keypressed/**").permitAll()
+                .requestMatchers("/oauth2/**", "/login/**", "/swagger-ui/**", "/api-docs/**").permitAll()
+                .requestMatchers("/", "/error", "/api/auth/**", "/api/error/**", "/api/ranking/**").permitAll()
                 .anyRequest().authenticated()
+            )
+            .exceptionHandling(exception -> exception
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    response.sendRedirect("/api/error/forbidden");
+                })
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.sendRedirect("/api/error/unauthorized");
+                })
+                .defaultAuthenticationEntryPointFor(
+                        (request, response, authException) -> response.sendRedirect("/api/error/not-found"),
+                        request -> true
+                )
             )
             .oauth2Login(oauth2 -> oauth2
                 .defaultSuccessUrl("/api/auth/success", true)
@@ -49,7 +64,7 @@ public class SecurityConfig {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-        
+
         return source;
     }
 }

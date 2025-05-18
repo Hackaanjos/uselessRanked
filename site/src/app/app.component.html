@@ -4,101 +4,100 @@
             Useless Ranked
         </h1>
         <mat-nav-list>
+            <ng-template ngFor let-objMetricModelGroup [ngForOf]="Object.values(MetricModelGroup)" let-i="index">
+                <mat-list-item>
+                    <button
+                        *ngIf="metricModelGroup === objMetricModelGroup"
+                        mat-flat-button
+                        class="w-full"
+                        (click)="selectMetricModelGroup(objMetricModelGroup)"
+                    >
+                        {{ objMetricModelGroup }}
+                    </button>
+
+                    <button
+                        *ngIf="metricModelGroup !== objMetricModelGroup"
+                        mat-stroked-button
+                        class="w-full"
+                        (click)="selectMetricModelGroup(objMetricModelGroup)"
+                    >
+                        {{ objMetricModelGroup }}
+                    </button>
+                </mat-list-item>
+            </ng-template>
+
+
+            <div class="space"></div>
+
             <mat-list-item>
-                <button mat-flat-button class="w-full text-left" (click)="selectRanking('keyboard')">Teclado</button>
-            </mat-list-item>
-            <mat-list-item>
-                <button mat-flat-button class="w-full text-left" (click)="selectRanking('mouse')">Mouse</button>
-            </mat-list-item>
-            <mat-list-item>
-                <button mat-flat-button class="w-full text-left" (click)="selectRanking('behavior')">Comportamento</button>
+                <button mat-stroked-button class="w-full">
+                    Logar
+                </button>
             </mat-list-item>
         </mat-nav-list>
     </mat-sidenav>
 
     <mat-sidenav-content>
         <h2 class="page-title">
-            Ranques de {{ selectedRanking }}
+            Ranques de {{ metricModelGroup }}
         </h2>
 
         <div class="page-content">
-            <ng-template ngFor let-item [ngForOf]="rankings" let-i="index">
+            <ng-template ngFor let-ranking [ngForOf]="rankingList" let-i="index">            
                 <mat-card>
-                    <mat-card-header>
-                        <h3 class="card-title">
-                            {{ item.name }} ({{ item.unit }})
-                        </h3>
+                    <mat-card-header class="!block">
+                        <div class="flex justify-between items-center">
+                            <h3 class="card-title">
+                                {{ ranking.description }} ({{ ranking.unit }})
+                            </h3>
+                            <mat-form-field class="w-64" *ngIf="ranking.name === 'specificKeyPressed'">
+                                <mat-label>Buscar ranking</mat-label>
+                                <input type="text"
+                                       class="w-full"
+                                       matInput
+                                       [formControl]="searchControl"
+                                       [matAutocomplete]="auto"
+                                       placeholder="Digite caractere específico">
+                                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                        {{option}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
                     </mat-card-header>
                     <mat-card-content>
                         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-                            <mat-tab label="Diario">
-                                <table mat-table [dataSource]="item.ranking">
-                                    <ng-container matColumnDef="position">
-                                        <th mat-header-cell *matHeaderCellDef> Posição </th>
-                                        <td mat-cell *matCellDef="let element; let i = index"> {{ i + 1 }} </td>
-                                    </ng-container>
+                            <ng-template ngFor let-periodType [ngForOf]="Object.values(PeriodType)" let-i="index">
+                                <mat-tab [label]="periodType.toString()">
+                                    <table mat-table [dataSource]="ranking.data[periodType]">
+                                        <ng-container matColumnDef="position">
+                                            <th mat-header-cell *matHeaderCellDef> Posição</th>
+                                            <td mat-cell *matCellDef="let i = index"> {{ i + 1 }}</td>
+                                        </ng-container>
 
-                                    <ng-container matColumnDef="name">
-                                        <th mat-header-cell *matHeaderCellDef> Usuário </th>
-                                        <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
-                                    </ng-container>
+                                        <ng-container matColumnDef="name">
+                                            <th mat-header-cell *matHeaderCellDef> Usuário</th>
+                                            <td mat-cell *matCellDef="let user"> {{ user.userName }}</td>
+                                        </ng-container>
 
-                                    <ng-container matColumnDef="score">
-                                        <th mat-header-cell *matHeaderCellDef>{{ item.unit }}</th>
-                                        <td mat-cell *matCellDef="let element"> {{ element.score }} </td>
-                                    </ng-container>
+                                        <ng-container matColumnDef="score">
+                                            <th mat-header-cell *matHeaderCellDef>{{ ranking.unit }}</th>
+                                            <td mat-cell *matCellDef="let user"> {{ user.eventCounter }}</td>
+                                        </ng-container>
 
-                                    <tr mat-header-row *matHeaderRowDef="['position', 'name', 'score']"></tr>
-                                    <tr mat-row *matRowDef="let row; columns: ['position', 'name', 'score'];"></tr>
-                                </table>
-                            </mat-tab>
-                            <mat-tab label="Semanal">
-                                <table mat-table [dataSource]="item.ranking">
-                                    <ng-container matColumnDef="position">
-                                        <th mat-header-cell *matHeaderCellDef> Posição </th>
-                                        <td mat-cell *matCellDef="let element; let i = index"> {{ i + 1 }} </td>
-                                    </ng-container>
-
-                                    <ng-container matColumnDef="name">
-                                        <th mat-header-cell *matHeaderCellDef> Usuário </th>
-                                        <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
-                                    </ng-container>
-
-                                    <ng-container matColumnDef="score">
-                                        <th mat-header-cell *matHeaderCellDef>{{ item.unit }}</th>
-                                        <td mat-cell *matCellDef="let element"> {{ element.score }} </td>
-                                    </ng-container>
-
-                                    <tr mat-header-row *matHeaderRowDef="['position', 'name', 'score']"></tr>
-                                    <tr mat-row *matRowDef="let row; columns: ['position', 'name', 'score'];"></tr>
-                                </table>
-                            </mat-tab>
-                            <mat-tab label="Todos os tempos">
-                                <table mat-table [dataSource]="item.ranking">
-                                    <ng-container matColumnDef="position">
-                                        <th mat-header-cell *matHeaderCellDef> Posição </th>
-                                        <td mat-cell *matCellDef="let element; let i = index"> {{ i + 1 }} </td>
-                                    </ng-container>
-
-                                    <ng-container matColumnDef="name">
-                                        <th mat-header-cell *matHeaderCellDef> Usuário </th>
-                                        <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
-                                    </ng-container>
-
-                                    <ng-container matColumnDef="score">
-                                        <th mat-header-cell *matHeaderCellDef>{{ item.unit }}</th>
-                                        <td mat-cell *matCellDef="let element"> {{ element.score }} </td>
-                                    </ng-container>
-
-                                    <tr mat-header-row *matHeaderRowDef="['position', 'name', 'score']"></tr>
-                                    <tr mat-row *matRowDef="let row; columns: ['position', 'name', 'score'];"></tr>
-                                </table>
-                            </mat-tab>
+                                        <tr mat-header-row *matHeaderRowDef="['position', 'name', 'score']"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: ['position', 'name', 'score'];"></tr>
+                                    </table>
+                                </mat-tab>
+                            </ng-template>
                         </mat-tab-group>
                     </mat-card-content>
                 </mat-card>
                 <br>
             </ng-template>
+
+            
         </div>
 
     </mat-sidenav-content>

@@ -1,4 +1,4 @@
-package com.codecon.hackaton.hackanjos.contoller;
+package com.codecon.hackaton.hackanjos.controller;
 
 import com.codecon.hackaton.hackanjos.dto.request.KeyPressedRequestDTO;
 import com.codecon.hackaton.hackanjos.model.User;
@@ -8,15 +8,12 @@ import com.codecon.hackaton.hackanjos.service.KeyPressedService;
 import lombok.AllArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/keypressed")
+@RestController
+@RequestMapping("api/keypressed")
 @AllArgsConstructor
 public class KeyPressedController {
 

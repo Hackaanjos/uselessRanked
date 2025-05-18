@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class HttpRequestManager {
-
-    private readonly baseUrl = 'localhost:8080';
 
     constructor(private http: HttpClient) {}
 
@@ -25,26 +23,26 @@ export class HttpRequestManager {
     }
 
     get<T>(endpoint: string, params?: HttpParams): Observable<T> {
-        return this.http.get<T>(`${this.baseUrl}/${endpoint}`, {
+        return this.http.get<T>(`/api/${endpoint}`, {
             headers: this.getHeaders(),
             params
         });
     }
 
     post<T>(endpoint: string, body: any): Observable<T> {
-        return this.http.post<T>(`${this.baseUrl}/${endpoint}`, body, {
+        return this.http.post<T>(`/api/${endpoint}`, body, {
             headers: this.getHeaders()
         });
     }
 
     put<T>(endpoint: string, body: any): Observable<T> {
-        return this.http.put<T>(`${this.baseUrl}/${endpoint}`, body, {
+        return this.http.put<T>(`/api/${endpoint}`, body, {
             headers: this.getHeaders()
         });
     }
 
     delete<T>(endpoint: string): Observable<T> {
-        return this.http.delete<T>(`${this.baseUrl}/${endpoint}`, {
+        return this.http.delete<T>(`/api/${endpoint}`, {
             headers: this.getHeaders()
         });
     }

@@ -1,11 +1,16 @@
 package com.codecon.hackaton.hackanjos.service;
 
+import com.codecon.hackaton.hackanjos.dto.response.ranking.AllKeyPressedResponseDTO;
+import com.codecon.hackaton.hackanjos.dto.response.ranking.KeyPressedByKeyResponseDTO;
 import com.codecon.hackaton.hackanjos.model.KeyPressed;
 import com.codecon.hackaton.hackanjos.model.User;
+import com.codecon.hackaton.hackanjos.model.enums.IntervalFilter;
 import com.codecon.hackaton.hackanjos.repository.KeyPressedRepository;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -29,9 +34,21 @@ public class KeyPressedService {
         }
     }
 
+    public Page<KeyPressedByKeyResponseDTO> listByKey(String key, IntervalFilter intervalFilter, Pageable pageable) {
+        LocalDateTime localStartDateTime = IntervalFilter.getLocalDateTimeByIntervalFilter(intervalFilter);
+
+        return keyPressedRepository
+                .findAllByKeyCodeAndEventDateAfterOrderByEventCounterDesc(key, localStartDateTime, pageable);
+    }
+
+    public Page<AllKeyPressedResponseDTO> listAll(IntervalFilter intervalFilter, Pageable pageable) {
+        LocalDateTime localDateTime = IntervalFilter.getLocalDateTimeByIntervalFilter(intervalFilter);
+
+        return keyPressedRepository.sumEventCounterGroupByUserId(localDateTime, pageable);
+    }
+
     private void save(String keyCode, Long eventCounter, User user) {
-        KeyPressed keyPressed;
-        keyPressed = new KeyPressed();
+        KeyPressed keyPressed = new KeyPressed();
         keyPressed.setKeyCode(keyCode);
         keyPressed.setEventCounter(eventCounter);
         keyPressed.setEventDate(LocalDateTime.now());
@@ -41,7 +58,6 @@ public class KeyPressedService {
 
     private void update(KeyPressed keyPressed, Long eventCounter) {
         keyPressed.setEventCounter(keyPressed.getEventCounter() + eventCounter);
-        keyPressed.setEventDate(LocalDateTime.now());
         keyPressedRepository.save(keyPressed);
     }
 }

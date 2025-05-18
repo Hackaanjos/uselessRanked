@@ -1,6 +1,6 @@
 # API Backend
 
-API Backend que é repsonsável por guardar as informações dos clientes.
+API Backend que é responsável por guardar as informações dos clientes.
 
 ## Tecnologias utilizadas
 

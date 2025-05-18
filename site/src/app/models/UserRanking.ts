@@ -1,5 +1,5 @@
 export interface UserRanking {
-    eventCounter: number
+    eventCounter: number;
     userName: string;
     userEmail: string;
 }

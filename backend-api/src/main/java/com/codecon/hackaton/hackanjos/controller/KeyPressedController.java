@@ -1,5 +1,6 @@
 package com.codecon.hackaton.hackanjos.controller;
 
+import com.codecon.hackaton.hackanjos.dto.reponse.AllKeyPressedResponseDTO;
 import com.codecon.hackaton.hackanjos.dto.reponse.KeyPressedByKeyResponseDTO;
 import com.codecon.hackaton.hackanjos.dto.request.KeyPressedRequestDTO;
 import com.codecon.hackaton.hackanjos.model.User;
@@ -17,8 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/keypressed")
+@RestController
+@RequestMapping("api/keypressed")
 @AllArgsConstructor
 public class KeyPressedController {
 
@@ -41,5 +42,10 @@ public class KeyPressedController {
             @PathVariable String key,
             @PageableDefault(page = 0, size = 5) Pageable pageable) {
         return ResponseEntity.ok(keyPressedService.listByKey(key.toUpperCase(), pageable));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<AllKeyPressedResponseDTO>> listAll(@PageableDefault(page = 0, size = 5) Pageable pageable) {
+        return ResponseEntity.ok(keyPressedService.listAll(pageable));
     }
 }

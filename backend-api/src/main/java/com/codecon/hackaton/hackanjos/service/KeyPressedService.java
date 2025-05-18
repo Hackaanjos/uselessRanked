@@ -1,5 +1,6 @@
 package com.codecon.hackaton.hackanjos.service;
 
+import com.codecon.hackaton.hackanjos.dto.reponse.AllKeyPressedResponseDTO;
 import com.codecon.hackaton.hackanjos.dto.reponse.KeyPressedByKeyResponseDTO;
 import com.codecon.hackaton.hackanjos.model.KeyPressed;
 import com.codecon.hackaton.hackanjos.model.User;
@@ -36,6 +37,10 @@ public class KeyPressedService {
         return keyPressedRepository
                 .findAllByKeyCodeOrderByEventCounterDesc(key, pageable)
                 .map(KeyPressedByKeyResponseDTO::new);
+    }
+
+    public Page<AllKeyPressedResponseDTO> listAll(Pageable pageable) {
+        return keyPressedRepository.sumEventCounterGroupByUserId(pageable);
     }
 
     private void save(String keyCode, Long eventCounter, User user) {

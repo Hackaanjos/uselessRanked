@@ -73,7 +73,7 @@ export class AppComponent implements OnInit {
       this.rankingList.push(mouseClickRanking)
 
       const mouseMovementData = this.rankingService.listMouseMovementRankings();
-      const mouseMovementRanking: Ranking = new Ranking("Movemento do mouse", "metros", mouseMovementData);
+      const mouseMovementRanking: Ranking = new Ranking("Movimento do mouse", "metros", mouseMovementData);
       this.rankingList.push(mouseMovementRanking)
 
       return;

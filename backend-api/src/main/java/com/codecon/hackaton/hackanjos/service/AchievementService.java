@@ -39,8 +39,8 @@ public class AchievementService {
 
     public void saveIfNecessary(User user, AchievementName achievementName) {
         String name = achievementName.name();
-        List<Achievement> existingAchievements = achievementRepository.findByUserAndName(user, name);
-        if (!existingAchievements.isEmpty()) {
+        boolean hasAchievements = achievementRepository.existsByUserAndName(user, name);
+        if (hasAchievements) {
             return;
         }
 

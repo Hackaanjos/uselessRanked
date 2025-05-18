@@ -18,7 +18,7 @@ export class AuthService {
   }
 
   login(): void {
-    window.location.href = 'http://localhost:8080/api/auth/login';
+    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
   }
 
   logout(): void {

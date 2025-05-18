@@ -29,6 +29,7 @@ public class AuthController {
 
     private final UserService userService;
     private static final String REDIRECT_URL = "redirectUrl";
+    private static final String FRONTEND_URL = "http://localhost:3000";
 
     /**
      * Redireciona o usuário para a URL de sucesso após autenticação via OAuth2.
@@ -41,7 +42,7 @@ public class AuthController {
     public RedirectView success(@AuthenticationPrincipal OAuth2User oAuth2User, HttpServletRequest request) {
         try {
             if (oAuth2User == null) {
-                return new RedirectView("/error?message=Usuário não autenticado");
+                return new RedirectView(FRONTEND_URL + "/error?message=Usuário não autenticado");
             }
 
             userService.processOAuth2User(oAuth2User);
@@ -50,14 +51,14 @@ public class AuthController {
             String redirectUrl = (String) session.getAttribute(REDIRECT_URL);
 
             if (redirectUrl == null || redirectUrl.isEmpty()) {
-                redirectUrl = "/";
+                redirectUrl = FRONTEND_URL;
             }
 
             session.removeAttribute(REDIRECT_URL);
 
             return new RedirectView(redirectUrl);
         } catch (Exception exception) {
-            return new RedirectView("/error?message=" + exception.getMessage());
+            return new RedirectView(FRONTEND_URL + "/error?message=" + exception.getMessage());
         }
     }
 
@@ -96,7 +97,7 @@ public class AuthController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
-            return new RedirectView("/?error=Usuário não está autenticado");
+            return new RedirectView(FRONTEND_URL + "?error=Usuário não está autenticado");
         }
 
         HttpSession session = request.getSession(false);
@@ -108,6 +109,6 @@ public class AuthController {
 
         SecurityContextHolder.clearContext();
 
-        return new RedirectView("/?message=Logout realizado com sucesso");
+        return new RedirectView(FRONTEND_URL + "?message=Logout realizado com sucesso");
     }
 }

@@ -18,6 +18,8 @@ import java.util.Arrays;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    private static final String FRONTEND_URL = "http://localhost:3000";
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
@@ -33,13 +35,13 @@ public class SecurityConfig {
             )
             .exceptionHandling(exception -> exception
                 .accessDeniedHandler((request, response, accessDeniedException) -> {
-                    response.sendRedirect("/api/error/forbidden");
+                    response.sendRedirect(FRONTEND_URL + "/error?message=Acesso negado");
                 })
                 .authenticationEntryPoint((request, response, authException) -> {
-                    response.sendRedirect("/api/error/unauthorized");
+                    response.sendRedirect(FRONTEND_URL + "/error?message=Não autorizado");
                 })
                 .defaultAuthenticationEntryPointFor(
-                        (request, response, authException) -> response.sendRedirect("/api/error/not-found"),
+                        (request, response, authException) -> response.sendRedirect(FRONTEND_URL + "/error?message=Não encontrado"),
                         request -> true
                 )
             )
@@ -57,7 +59,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Ajuste para o seu frontend
+        configuration.setAllowedOrigins(Arrays.asList(FRONTEND_URL));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);

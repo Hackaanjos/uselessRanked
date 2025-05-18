@@ -17,7 +17,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -42,8 +41,7 @@ public class AuthController {
     @GetMapping("/success")
     public RedirectView success(
             @AuthenticationPrincipal OAuth2User oAuth2User,
-            HttpServletRequest request,
-            @RequestParam(required = false) String callback) {
+            HttpServletRequest request) {
         String callbackUrl = FRONTEND_URL;
 
         try {
@@ -87,14 +85,12 @@ public class AuthController {
      *
      * @param request HttpServletRequest para acessar a sessão
      * @param response HttpServletResponse para configurar os headers de resposta
-     * @param callback URL de callback para redirecionamento após o logout
      * @return RedirectView para a página inicial
      */
     @GetMapping("/logout")
     public RedirectView logout(
             HttpServletRequest request,
-            HttpServletResponse response,
-            @RequestParam(required = false) String callback) {
+            HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String callbackUrl = FRONTEND_URL;
 
@@ -112,18 +108,5 @@ public class AuthController {
         SecurityContextHolder.clearContext();
 
         return new RedirectView(callbackUrl + "?message=Logout realizado com sucesso");
-    }
-
-    private String getCallbackUrl(String callback, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String redirectUrl = (String) session.getAttribute(REDIRECT_URL);
-
-        if (redirectUrl == null || redirectUrl.isEmpty()) {
-            redirectUrl = callback != null ? callback : FRONTEND_URL;
-        }
-
-        session.removeAttribute(REDIRECT_URL);
-
-        return redirectUrl;
     }
 }

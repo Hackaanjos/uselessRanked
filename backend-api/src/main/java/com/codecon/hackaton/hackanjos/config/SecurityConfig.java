@@ -18,7 +18,7 @@ import java.util.Arrays;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private static final String FRONTEND_URL = "http://localhost:3000";
+    private static final String FRONTEND_URL = "http://localhost:4200";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

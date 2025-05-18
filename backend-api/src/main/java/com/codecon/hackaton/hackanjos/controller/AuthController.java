@@ -29,7 +29,7 @@ public class AuthController {
 
     private final UserService userService;
     private static final String REDIRECT_URL = "redirectUrl";
-    private static final String FRONTEND_URL = "http://localhost:3000";
+    private static final String FRONTEND_URL = "http://localhost:4200";
 
     /**
      * Redireciona o usuário para a URL de sucesso após autenticação via OAuth2.

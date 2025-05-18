@@ -1,5 +1,6 @@
 package com.codecon.hackaton.hackanjos.model;
 
+import com.codecon.hackaton.hackanjos.model.enums.AchievementName;
 import jakarta.persistence.*;
 
 import lombok.Data;
@@ -24,4 +25,8 @@ public class Achievement {
     @ManyToOne
     @JoinColumn(name = "user_id")
     User user;
+
+    public AchievementName getAchievementName() {
+        return AchievementName.valueOf(name);
+    }
 }

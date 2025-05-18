@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
 import { PeriodType } from "../utils/enums/PeriodType";
 import { MetricModelGroup } from "../utils/enums/MetricModelGroup";
 import { NgFor, NgForOf, NgIf, AsyncPipe } from "@angular/common";
@@ -32,6 +33,7 @@ import { AuthService } from './services/auth.service';
     MatButtonToggleModule,
     MatCardModule,
     MatTableModule,
+    MatIconModule,
     FormsModule,
     ReactiveFormsModule,
     MatAutocompleteModule,

@@ -1,50 +1,66 @@
 <mat-sidenav-container class="h-screen">
-    <mat-sidenav mode="side" opened>
-        <h1 class="title">
-            Useless Ranked
-        </h1>
-        <mat-nav-list>
-            <ng-template ngFor let-objMetricModelGroup [ngForOf]="Object.values(MetricModelGroup)" let-i="index">
-                <mat-list-item>
-                    <button
-                        *ngIf="metricModelGroup === objMetricModelGroup"
-                        mat-flat-button
-                        class="w-full"
-                        (click)="selectMetricModelGroup(objMetricModelGroup)"
-                    >
-                        {{ objMetricModelGroup }}
-                    </button>
+    <mat-sidenav mode="side" opened class="h-full">
+        <div class="flex flex-col justify-between h-full">
+            <div class="flex flex-col">
+                <h1 class="title">
+                    Useless Ranked
+                </h1>
+                <mat-nav-list>
+                    <ng-template ngFor let-objMetricModelGroup [ngForOf]="Object.values(MetricModelGroup)" let-i="index">
+                        <mat-list-item>
+                            <button
+                                *ngIf="metricModelGroup === objMetricModelGroup"
+                                mat-flat-button
+                                class="w-full"
+                                (click)="selectMetricModelGroup(objMetricModelGroup)"
+                            >
+                                {{ objMetricModelGroup }}
+                            </button>
 
-                    <button
-                        *ngIf="metricModelGroup !== objMetricModelGroup"
-                        mat-stroked-button
-                        class="w-full"
-                        (click)="selectMetricModelGroup(objMetricModelGroup)"
-                    >
-                        {{ objMetricModelGroup }}
-                    </button>
-                </mat-list-item>
-            </ng-template>
+                            <button
+                                *ngIf="metricModelGroup !== objMetricModelGroup"
+                                mat-stroked-button
+                                class="w-full"
+                                (click)="selectMetricModelGroup(objMetricModelGroup)"
+                            >
+                                {{ objMetricModelGroup }}
+                            </button>
+                        </mat-list-item>
+                    </ng-template>
+                </mat-nav-list>
+            </div>
 
-            <div class="space"></div>
+            <div class="flex flex-col mt-auto">
+                <mat-nav-list>
+                    <mat-list-item *ngIf="authService.currentUser$ | async as user">
+                        <div class="flex items-center gap-2 w-full">
+                            <img [src]="user.picture" [alt]="user.name" class="w-8 h-8 rounded-full">
+                            <span class="flex-1">{{ user.name }}</span>
+                        </div>
+                    </mat-list-item>
 
-            <mat-list-item *ngIf="authService.currentUser$ | async as user">
-                <div class="flex items-center gap-2 w-full">
-                    <img [src]="user.picture" [alt]="user.name" class="w-8 h-8 rounded-full">
-                    <span class="flex-1">{{ user.name }}</span>
-                </div>
-            </mat-list-item>
+                    <mat-list-item *ngIf="authService.currentUser$ | async as user">
+                        <button mat-stroked-button class="w-full">
+                            <div class="flex items-center gap-2">
+                                <mat-icon>emoji_events</mat-icon>
+                                <span>Conquistas</span>
+                            </div>
+                        </button>
+                    </mat-list-item>
 
-            <mat-list-item>
-                <button 
-                    mat-stroked-button 
-                    class="w-full"
-                    (click)="handleAuth()"
-                >
-                    {{ (isLoggedIn$ | async) ? 'Sair' : 'Logar com Google' }}
-                </button>
-            </mat-list-item>
-        </mat-nav-list>
+                    <mat-list-item>
+                        <button
+                            mat-stroked-button
+                            class="w-full"
+                            (click)="handleAuth()"
+                        >
+                            {{ (isLoggedIn$ | async) ? 'Sair' : 'Logar com Google' }}
+                        </button>
+                    </mat-list-item>
+                </mat-nav-list>
+            </div>
+        </div>
+
     </mat-sidenav>
 
     <mat-sidenav-content>

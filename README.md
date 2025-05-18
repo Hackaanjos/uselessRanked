@@ -31,6 +31,8 @@ O projeto é dividido em três partes:
 
 Projeto desenvolvido durante o [Hackathon Codecon Universe](https://codecon.dev/universe) por [@bmorais21](https://github.com/bmorais21), [@JelielBraz](https://github.com/JelielBraz), [@JezreelMoraes](https://github.com/JezreelMoraes), [@MiguelBCosta](https://github.com/MiguelBCosta), sob.
 
+![equipe.png](img/equipe.png)
+
 ## Licença
 
 Veja o arquivo [LICENSE.TXT](LICENSE.TXT) para direitos e limitações da licença (MIT).

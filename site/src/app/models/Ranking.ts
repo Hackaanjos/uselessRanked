@@ -2,7 +2,7 @@ import { UserRanking } from "./UserRanking";
 
 export class Ranking {
 
-    name: string
+    name: string;
     unit: string;
     topUsersList: Array<UserRanking>;
 

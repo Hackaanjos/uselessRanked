@@ -1,7 +1,7 @@
 package com.codecon.hackaton.hackanjos.service;
 
-import com.codecon.hackaton.hackanjos.dto.reponse.AllKeyPressedResponseDTO;
-import com.codecon.hackaton.hackanjos.dto.reponse.KeyPressedByKeyResponseDTO;
+import com.codecon.hackaton.hackanjos.dto.response.AllKeyPressedResponseDTO;
+import com.codecon.hackaton.hackanjos.dto.response.KeyPressedByKeyResponseDTO;
 import com.codecon.hackaton.hackanjos.model.KeyPressed;
 import com.codecon.hackaton.hackanjos.model.User;
 import com.codecon.hackaton.hackanjos.model.enums.IntervalFilter;
@@ -9,7 +9,6 @@ import com.codecon.hackaton.hackanjos.repository.KeyPressedRepository;
 
 import lombok.AllArgsConstructor;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,14 +35,14 @@ public class KeyPressedService {
     }
 
     public Page<KeyPressedByKeyResponseDTO> listByKey(String key, IntervalFilter intervalFilter, Pageable pageable) {
-        LocalDateTime localStartDateTime = getLocalDateTimeByIntervalFilter(intervalFilter);
+        LocalDateTime localStartDateTime = IntervalFilter.getLocalDateTimeByIntervalFilter(intervalFilter);
 
         return keyPressedRepository
                 .findAllByKeyCodeAndEventDateAfterOrderByEventCounterDesc(key, localStartDateTime, pageable);
     }
 
     public Page<AllKeyPressedResponseDTO> listAll(IntervalFilter intervalFilter, Pageable pageable) {
-        LocalDateTime localDateTime = getLocalDateTimeByIntervalFilter(intervalFilter);
+        LocalDateTime localDateTime = IntervalFilter.getLocalDateTimeByIntervalFilter(intervalFilter);
 
         return keyPressedRepository.sumEventCounterGroupByUserId(localDateTime, pageable);
     }
@@ -61,14 +60,5 @@ public class KeyPressedService {
         keyPressed.setEventCounter(keyPressed.getEventCounter() + eventCounter);
         keyPressed.setEventDate(LocalDateTime.now());
         keyPressedRepository.save(keyPressed);
-    }
-
-    private static LocalDateTime getLocalDateTimeByIntervalFilter(IntervalFilter intervalFilter) {
-        return switch (intervalFilter) {
-            case DAY -> LocalDate.now().atStartOfDay();
-            case WEEK -> LocalDate.now().minusDays(7).atStartOfDay();
-            case MONTH -> LocalDate.now().minusMonths(1).atStartOfDay();
-            case ALL_TIME -> LocalDate.now().minusYears(100).atStartOfDay();
-        };
     }
 }

@@ -1,7 +1,7 @@
 package com.codecon.hackaton.hackanjos.controller;
 
-import com.codecon.hackaton.hackanjos.dto.reponse.AllKeyPressedResponseDTO;
-import com.codecon.hackaton.hackanjos.dto.reponse.KeyPressedByKeyResponseDTO;
+import com.codecon.hackaton.hackanjos.dto.response.AllKeyPressedResponseDTO;
+import com.codecon.hackaton.hackanjos.dto.response.KeyPressedByKeyResponseDTO;
 import com.codecon.hackaton.hackanjos.dto.request.KeyPressedRequestDTO;
 import com.codecon.hackaton.hackanjos.model.User;
 import com.codecon.hackaton.hackanjos.model.enums.IntervalFilter;

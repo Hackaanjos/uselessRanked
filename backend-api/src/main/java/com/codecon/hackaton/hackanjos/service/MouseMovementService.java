@@ -17,18 +17,21 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MouseMovementService {
 
-    MouseMovementRepository mouseMovementRepository;
+    private MouseMovementRepository mouseMovementRepository;
+    private AchievementService achievementService;
 
     public void saveOrUpdateEvent(Long distance, User user) {
         LocalDateTime localStartDateTime = LocalDate.now().atStartOfDay();
         LocalDateTime localEndDateTime = LocalDate.now().atTime(23, 59, 59);
 
-         MouseMovement mouseMovement = mouseMovementRepository.getMouseMovementByUserIdAndEventDateBetween(user.getId(), localStartDateTime, localEndDateTime);
-         if (mouseMovement == null) {
-                save(distance, user);
-         } else {
-                update(mouseMovement, distance);
-         }
+        MouseMovement mouseMovement = mouseMovementRepository.getMouseMovementByUserIdAndEventDateBetween(user.getId(), localStartDateTime, localEndDateTime);
+        if (mouseMovement == null) {
+            MouseMovement newMouseMovement = save(distance, user);
+            achievementService.triggerMouseMovementAchievement(user, newMouseMovement.getDistance());
+        } else {
+            mouseMovement = update(mouseMovement, distance);
+            achievementService.triggerMouseMovementAchievement(user, mouseMovement.getDistance());
+        }
     }
 
     public Page<MouseMovementResponseDTO> listAll(IntervalFilter intervalFilter, Pageable pageable) {
@@ -37,18 +40,17 @@ public class MouseMovementService {
         return mouseMovementRepository.sumDistanceGroupByUserId(localDateTime, pageable);
     }
 
-    private void save(Long distance, User user) {
+    private MouseMovement save(Long distance, User user) {
         MouseMovement mouseMovement = new MouseMovement();
         mouseMovement.setDistance(distance);
         mouseMovement.setEventDate(LocalDateTime.now());
         mouseMovement.setUser(user);
 
-        mouseMovementRepository.save(mouseMovement);
+        return mouseMovementRepository.save(mouseMovement);
     }
 
-    private void update(MouseMovement mouseMovement, Long distance) {
+    private MouseMovement update(MouseMovement mouseMovement, Long distance) {
         mouseMovement.setDistance(mouseMovement.getDistance() + distance);
-
-        mouseMovementRepository.save(mouseMovement);
+        return mouseMovementRepository.save(mouseMovement);
     }
 }

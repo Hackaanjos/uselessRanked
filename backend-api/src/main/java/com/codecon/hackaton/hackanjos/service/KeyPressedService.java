@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 public class KeyPressedService {
 
     private KeyPressedRepository keyPressedRepository;
+    private AchievementService achievementService;
 
     public void saveOrUpdateEvent(String keyCode, Long eventCounter, User user) {
         LocalDateTime localStartDateTime = LocalDate.now().atStartOfDay();
@@ -28,9 +29,11 @@ public class KeyPressedService {
         KeyPressed keyPressed = keyPressedRepository.getKeyPressedByKeyCodeAndUserIdAndEventDateBetween(keyCode, user.getId(), localStartDateTime, localEndDateTime);
 
         if (keyPressed == null) {
-            save(keyCode, eventCounter, user);
+            KeyPressed newKeyPressed = save(keyCode, eventCounter, user);
+            achievementService.triggerKeyPressAchievement(user, newKeyPressed.getEventCounter());
         } else {
-            update(keyPressed, eventCounter);
+            keyPressed = update(keyPressed, eventCounter);
+            achievementService.triggerKeyPressAchievement(user, keyPressed.getEventCounter());
         }
     }
 
@@ -47,17 +50,17 @@ public class KeyPressedService {
         return keyPressedRepository.sumEventCounterGroupByUserId(localDateTime, pageable);
     }
 
-    private void save(String keyCode, Long eventCounter, User user) {
+    private KeyPressed save(String keyCode, Long eventCounter, User user) {
         KeyPressed keyPressed = new KeyPressed();
         keyPressed.setKeyCode(keyCode);
         keyPressed.setEventCounter(eventCounter);
         keyPressed.setEventDate(LocalDateTime.now());
         keyPressed.setUser(user);
-        keyPressedRepository.save(keyPressed);
+        return keyPressedRepository.save(keyPressed);
     }
 
-    private void update(KeyPressed keyPressed, Long eventCounter) {
+    private KeyPressed update(KeyPressed keyPressed, Long eventCounter) {
         keyPressed.setEventCounter(keyPressed.getEventCounter() + eventCounter);
-        keyPressedRepository.save(keyPressed);
+        return keyPressedRepository.save(keyPressed);
     }
 }

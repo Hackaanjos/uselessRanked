@@ -1,7 +1,5 @@
 package com.codecon.hackaton.hackanjos.model;
 
-import com.codecon.hackaton.hackanjos.model.enums.AchievementName;
-
 import jakarta.persistence.*;
 
 import lombok.Data;
@@ -18,7 +16,7 @@ public class Achievement {
     Long id;
 
     @Column(nullable = false)
-    AchievementName name;
+    String name;
 
     @Column(nullable = false)
     LocalDateTime achievedAt;

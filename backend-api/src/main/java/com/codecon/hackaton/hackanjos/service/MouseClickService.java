@@ -21,6 +21,7 @@ import java.util.Optional;
 public class MouseClickService {
 
     private MouseClickRepository mouseClickRepository;
+    private AchievementService achievementService;
 
     public void saveOrUpdateEvent(Long eventCounter, User user) {
         LocalDateTime localStartDateTime = LocalDate.now().atStartOfDay();
@@ -28,9 +29,12 @@ public class MouseClickService {
         Optional<MouseClick> mouseClick = mouseClickRepository.getMouseClickByUserIdAndEventDateBetween(user.getId(), localStartDateTime, localEndDateTime);
 
         if (mouseClick.isEmpty()) {
-            save(eventCounter, user);
+            MouseClick newMouseClick = save(eventCounter, user);
+            achievementService.triggerMouseClickAchievement(user, newMouseClick);
         } else {
-            update(mouseClick.orElse(null), eventCounter);
+            MouseClick updatedMouseClick = update(mouseClick.orElse(null), eventCounter);
+
+            achievementService.triggerMouseClickAchievement(user, updatedMouseClick);
         }
     }
 
@@ -40,17 +44,17 @@ public class MouseClickService {
         return mouseClickRepository.sumEventCounterGroupByUserId(localDateTime, pageable);
     }
 
-    private void save(Long eventCounter, User user) {
+    private MouseClick save(Long eventCounter, User user) {
         MouseClick mouseClick = new MouseClick();
         mouseClick.setEventCounter(eventCounter);
         mouseClick.setEventDate(LocalDateTime.now());
         mouseClick.setUser(user);
 
-        mouseClickRepository.save(mouseClick);
+        return mouseClickRepository.save(mouseClick);
     }
 
-    private void update(MouseClick mouseClick, Long eventCounter) {
+    private MouseClick update(MouseClick mouseClick, Long eventCounter) {
         mouseClick.setEventCounter(mouseClick.getEventCounter() + eventCounter);
-        mouseClickRepository.save(mouseClick);
+        return mouseClickRepository.save(mouseClick);
     }
 }

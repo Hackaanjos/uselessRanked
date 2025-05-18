@@ -38,7 +38,6 @@ public class MouseClickService {
         LocalDateTime localDateTime = IntervalFilter.getLocalDateTimeByIntervalFilter(intervalFilter);
 
         return mouseClickRepository.sumEventCounterGroupByUserId(localDateTime, pageable);
-
     }
 
     private void save(Long eventCounter, User user) {

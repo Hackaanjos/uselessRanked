@@ -44,25 +44,18 @@ public class AuthController {
             @AuthenticationPrincipal OAuth2User oAuth2User,
             HttpServletRequest request,
             @RequestParam(required = false) String callback) {
+        String callbackUrl = getCallbackUrl(callback, request);
+
         try {
             if (oAuth2User == null) {
-                return new RedirectView(callback != null ? callback + "?error=Usuário não autenticado" : "/?error=Usuário não autenticado");
+                return new RedirectView(callbackUrl + "?error=Usuário não autenticado");
             }
 
             userService.processOAuth2User(oAuth2User);
 
-            HttpSession session = request.getSession();
-            String redirectUrl = (String) session.getAttribute(REDIRECT_URL);
-
-            if (redirectUrl == null || redirectUrl.isEmpty()) {
-                redirectUrl = callback != null ? callback : FRONTEND_URL;
-            }
-
-            session.removeAttribute(REDIRECT_URL);
-
-            return new RedirectView(redirectUrl);
+            return new RedirectView(callbackUrl);
         } catch (Exception exception) {
-            return new RedirectView(callback != null ? callback + "?error=" + exception.getMessage() : "/?error=" + exception.getMessage());
+            return new RedirectView(callbackUrl + "?error=" + exception.getMessage());
         }
     }
 
@@ -103,9 +96,10 @@ public class AuthController {
             HttpServletResponse response,
             @RequestParam(required = false) String callback) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String callbackUrl = getCallbackUrl(callback, request);
 
         if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
-            return new RedirectView(callback + "?error=Usuário não está autenticado");
+            return new RedirectView(callbackUrl + "?error=Usuário não está autenticado");
         }
 
         HttpSession session = request.getSession(false);
@@ -117,6 +111,19 @@ public class AuthController {
 
         SecurityContextHolder.clearContext();
 
-        return new RedirectView(callback + "?message=Logout realizado com sucesso");
+        return new RedirectView(callbackUrl + "?message=Logout realizado com sucesso");
+    }
+
+    private String getCallbackUrl(String callback, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String redirectUrl = (String) session.getAttribute(REDIRECT_URL);
+
+        if (redirectUrl == null || redirectUrl.isEmpty()) {
+            redirectUrl = callback != null ? callback : FRONTEND_URL;
+        }
+
+        session.removeAttribute(REDIRECT_URL);
+
+        return redirectUrl;
     }
 }

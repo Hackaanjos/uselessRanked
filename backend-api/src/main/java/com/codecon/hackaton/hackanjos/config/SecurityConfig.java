@@ -2,6 +2,7 @@ package com.codecon.hackaton.hackanjos.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
@@ -26,7 +28,7 @@ public class SecurityConfig {
             .csrf().disable()
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/oauth2/**", "/login/**", "/swagger-ui/**", "/api-docs/**").permitAll()
-                .requestMatchers("/", "/error", "/api/auth/**", "/api/error/**", "/api/ranking/**").permitAll()
+                .requestMatchers("/", "/error", "/api/auth/**", "/api/error/**").permitAll()
                 .anyRequest().authenticated()
             )
             .exceptionHandling(exception -> exception

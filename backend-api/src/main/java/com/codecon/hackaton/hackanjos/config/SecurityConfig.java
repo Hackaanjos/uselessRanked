@@ -25,8 +25,21 @@ public class SecurityConfig {
             .cors().and()
             .csrf().disable()
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/api/auth/**", "/oauth2/**", "/login/**", "/swagger-ui/**", "/api-docs/**", "/api/ranking/**").permitAll()
+                .requestMatchers("/oauth2/**", "/login/**", "/swagger-ui/**", "/api-docs/**").permitAll()
+                .requestMatchers("/", "/error", "/api/auth/**", "/api/error/**", "/api/ranking/**").permitAll()
                 .anyRequest().authenticated()
+            )
+            .exceptionHandling(exception -> exception
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    response.sendRedirect("/api/error/forbidden");
+                })
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.sendRedirect("/api/error/unauthorized");
+                })
+                .defaultAuthenticationEntryPointFor(
+                        (request, response, authException) -> response.sendRedirect("/api/error/not-found"),
+                        request -> true
+                )
             )
             .oauth2Login(oauth2 -> oauth2
                 .defaultSuccessUrl("/api/auth/success", true)

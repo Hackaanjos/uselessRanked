@@ -18,28 +18,32 @@ export class RankingServiceWeb implements RankingServiceInterface {
   }
 
   public listSingleKeyRankings(key: string): Record<PeriodType, UserRanking[]> {
-    const rankings: Record<PeriodType, UserRanking[]> = {
-      [PeriodType.DAY]: [],
-      [PeriodType.WEEK]: [],
-      [PeriodType.MONTH]: [],
-      [PeriodType.ALL_TIME]: []
-    };
-
-    // @ts-ignore
-    Object.values(PeriodType).forEach((periodType: PeriodType) => {
-      this.getSingleKeyRanking(key, periodType).subscribe(data => {
-        rankings[periodType] = data.content;
-      });
-    })
-
-    return rankings;
+    return this.defaultList((periodType: PeriodType) => {
+      return this.getSingleKeyRanking(key, periodType)
+    });
   }
 
   public getAllKeysRanking(periodType: PeriodType): Observable<PaginatedList<UserRanking>> {
     return this.http.get<PaginatedList<UserRanking>>(`ranking/keypressed/${periodType}`);
   }
 
-  public listAllKeysRanking(): Record<PeriodType, UserRanking[]> {
+  public listAllKeysRankings(): Record<PeriodType, UserRanking[]> {
+    return this.defaultList((periodType: PeriodType) => {
+      return this.getAllKeysRanking(periodType);
+    });
+  }
+
+  public getMouseClickRanking(periodType: PeriodType): Observable<PaginatedList<UserRanking>> {
+    return this.http.get<PaginatedList<UserRanking>>(`ranking/mouseclick/${periodType}`);
+  }
+
+  public listMouseClickRankings(): Record<PeriodType, UserRanking[]> {
+    return this.defaultList((periodType: PeriodType) => {
+      return this.getMouseClickRanking(periodType);
+    });
+  }
+
+  private defaultList(callback: (periodType: PeriodType) => Observable<PaginatedList<UserRanking>>): Record<PeriodType, UserRanking[]> {
     const rankings: Record<PeriodType, UserRanking[]> = {
       [PeriodType.DAY]: [],
       [PeriodType.WEEK]: [],
@@ -47,9 +51,8 @@ export class RankingServiceWeb implements RankingServiceInterface {
       [PeriodType.ALL_TIME]: []
     };
 
-    // @ts-ignore
     Object.values(PeriodType).forEach((periodType: PeriodType) => {
-      this.getAllKeysRanking(periodType).subscribe(data => {
+      callback(periodType).subscribe(data => {
         rankings[periodType] = data.content;
       });
     })

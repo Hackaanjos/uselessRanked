@@ -5,12 +5,12 @@
         </h1>
         <mat-nav-list>
             <mat-list-item>
-                <button mat-flat-button class="w-full text-left" (click)="selectRanking(MetricModelGroup.KEYBOARD)">
+                <button mat-flat-button class="w-full text-left" (click)="selectMetricModelGroup(MetricModelGroup.KEYBOARD)">
                     Teclado
                 </button>
             </mat-list-item>
             <mat-list-item>
-                <button mat-flat-button class="w-full text-left" (click)="selectRanking(MetricModelGroup.MOUSE)">
+                <button mat-flat-button class="w-full text-left" (click)="selectMetricModelGroup(MetricModelGroup.MOUSE)">
                     Mouse
                 </button>
             </mat-list-item>
@@ -19,7 +19,7 @@
 
     <mat-sidenav-content>
         <h2 class="page-title">
-            Ranques de {{ selectedRanking }}
+            Ranques de {{ metricModelGroup }}
         </h2>
 
         <div class="page-content">

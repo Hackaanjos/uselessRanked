@@ -34,28 +34,41 @@ import { Ranking } from "./models/Ranking";
 })
 export class AppComponent implements OnInit {
 
-  selectedRanking: MetricModelGroup = MetricModelGroup.KEYBOARD;
-  period: PeriodType = PeriodType.DAY;
+  metricModelGroup: MetricModelGroup = MetricModelGroup.KEYBOARD;
   rankingList: Array<Ranking> = [];
 
   constructor(private rankingService: RankingServiceWeb) {}
 
   ngOnInit(): void {
-    const singleKeysData = this.rankingService.listSingleKeyRankings("1");
-    const singleKeysRanking: Ranking = new Ranking("Caractere pressionado", "quantidade", singleKeysData);
-    this.rankingList.push(singleKeysRanking)
-
-    const allKeysData = this.rankingService.listAllKeysRanking();
-    const allKeysRanking: Ranking = new Ranking("Caracteres pressionados", "quantidade", allKeysData);
-    this.rankingList.push(allKeysRanking)
+    this.loadRankings();
   }
 
-  selectRanking(type: MetricModelGroup) {
-    this.selectedRanking = type;
+  selectMetricModelGroup(metricModelGroup: MetricModelGroup) {
+    this.metricModelGroup = metricModelGroup;
+    this.rankingList = [];
+    this.loadRankings();
   }
 
-  selectPeriod(periodType: PeriodType) {
-    this.period = periodType;
+  private loadRankings(): void {
+    if (this.metricModelGroup == MetricModelGroup.KEYBOARD) {
+      const singleKeysData = this.rankingService.listSingleKeyRankings("1");
+      const singleKeysRanking: Ranking = new Ranking("Caractere pressionado", "quantidade", singleKeysData);
+      this.rankingList.push(singleKeysRanking)
+
+      const allKeysData = this.rankingService.listAllKeysRankings();
+      const allKeysRanking: Ranking = new Ranking("Caracteres pressionados", "quantidade", allKeysData);
+      this.rankingList.push(allKeysRanking)
+
+      return;
+    }
+
+    if (this.metricModelGroup == MetricModelGroup.MOUSE) {
+      const mouseClickData = this.rankingService.listMouseClickRankings();
+      const mouseClickRanking: Ranking = new Ranking("Clicks de mouse", "clicks", mouseClickData);
+      this.rankingList.push(mouseClickRanking)
+
+      return;
+    }
   }
 
   protected readonly MetricModelGroup = MetricModelGroup;

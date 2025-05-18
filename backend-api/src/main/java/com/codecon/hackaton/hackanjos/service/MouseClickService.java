@@ -51,7 +51,6 @@ public class MouseClickService {
 
     private void update(MouseClick mouseClick, Long eventCounter) {
         mouseClick.setEventCounter(mouseClick.getEventCounter() + eventCounter);
-        mouseClick.setEventDate(LocalDateTime.now());
         mouseClickRepository.save(mouseClick);
     }
 }

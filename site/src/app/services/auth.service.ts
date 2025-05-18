@@ -1,20 +1,38 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpRequestManager } from '../../utils/http/http-request-manager';
+import { map } from 'rxjs/operators';
+
+interface User {
+  id: number;
+  email: string;
+  name: string;
+  picture: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
-  isLoggedIn$ = this.isLoggedInSubject.asObservable();
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
+  public isLoggedIn$ = this.currentUser$.pipe(
+    map(user => user !== null)
+  );
 
-  constructor(private http: HttpClient) {
-    // Verifica se há um token salvo no localStorage
-    const token = localStorage.getItem('token');
-    if (token) {
-      this.isLoggedInSubject.next(true);
-    }
+  constructor(private http: HttpRequestManager) {
+    this.checkAuthStatus();
+  }
+
+  private checkAuthStatus(): void {
+    this.http.get<User>('auth/user').subscribe({
+      next: (user) => {
+        this.currentUserSubject.next(user);
+      },
+      error: () => {
+        this.currentUserSubject.next(null);
+      }
+    });
   }
 
   login(): void {
@@ -23,5 +41,9 @@ export class AuthService {
 
   logout(): void {
     window.location.href = 'http://localhost:8080/api/auth/logout';
+  }
+
+  isAuthenticated(): boolean {
+    return this.currentUserSubject.value !== null;
   }
 } 

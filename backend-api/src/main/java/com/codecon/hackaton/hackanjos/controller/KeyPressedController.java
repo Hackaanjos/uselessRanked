@@ -37,7 +37,7 @@ public class KeyPressedController {
         return ResponseEntity.ok("KeyPresseds salvos com sucesso");
     }
 
-    @GetMapping("/{key}/{intervalFilterString}")
+    @GetMapping("/{key}/findByKey/{intervalFilterString}")
     public ResponseEntity<Page<KeyPressedByKeyResponseDTO>> listByKey(
             @PathVariable String key,
             @PathVariable String intervalFilterString,

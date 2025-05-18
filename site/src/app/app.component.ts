@@ -13,6 +13,7 @@ import { MetricModelGroup } from "../utils/enums/MetricModelGroup";
 import { NgFor, NgForOf, NgIf } from "@angular/common";
 import { RankingServiceWeb } from "./services/ranking.service.web";
 import { Ranking } from "./models/Ranking";
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -36,8 +37,12 @@ export class AppComponent implements OnInit {
 
   metricModelGroup: MetricModelGroup = MetricModelGroup.KEYBOARD;
   rankingList: Array<Ranking> = [];
+  isLoggedIn$ = this.authService.isLoggedIn$;
 
-  constructor(private rankingService: RankingServiceWeb) {}
+  constructor(
+    private rankingService: RankingServiceWeb,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.loadRankings();
@@ -47,6 +52,16 @@ export class AppComponent implements OnInit {
     this.metricModelGroup = metricModelGroup;
     this.rankingList = [];
     this.loadRankings();
+  }
+
+  handleAuth(): void {
+    this.authService.isLoggedIn$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this.authService.logout();
+      } else {
+        this.authService.login();
+      }
+    });
   }
 
   private loadRankings(): void {

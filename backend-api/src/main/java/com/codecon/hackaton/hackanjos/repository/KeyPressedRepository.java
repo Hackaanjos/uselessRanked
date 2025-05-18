@@ -1,7 +1,7 @@
 package com.codecon.hackaton.hackanjos.repository;
 
-import com.codecon.hackaton.hackanjos.dto.response.AllKeyPressedResponseDTO;
-import com.codecon.hackaton.hackanjos.dto.response.KeyPressedByKeyResponseDTO;
+import com.codecon.hackaton.hackanjos.dto.response.ranking.AllKeyPressedResponseDTO;
+import com.codecon.hackaton.hackanjos.dto.response.ranking.KeyPressedByKeyResponseDTO;
 import com.codecon.hackaton.hackanjos.model.KeyPressed;
 
 import org.springframework.data.domain.Page;

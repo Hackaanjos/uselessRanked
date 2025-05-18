@@ -33,7 +33,6 @@ import { map, startWith } from 'rxjs/operators';
     MatTableModule,
     FormsModule,
     ReactiveFormsModule,
-    MatTabsModule,
     MatAutocompleteModule,
     MatInputModule,
     MatFormFieldModule

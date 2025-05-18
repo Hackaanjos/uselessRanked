@@ -6,18 +6,23 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { PeriodType } from "../utils/enums/PeriodType";
 import { MetricModelGroup } from "../utils/enums/MetricModelGroup";
-import { NgFor, NgForOf, NgIf } from "@angular/common";
+import { NgFor, NgForOf, NgIf, AsyncPipe } from "@angular/common";
 import { RankingServiceWeb } from "./services/ranking.service.web";
 import { Ranking } from "./models/Ranking";
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   imports: [
-    NgForOf, NgFor, NgIf,
+    NgForOf, NgFor, NgIf, AsyncPipe,
     MatTabsModule,
     MatSidenavModule,
     MatToolbarModule,
@@ -27,7 +32,10 @@ import { Ranking } from "./models/Ranking";
     MatCardModule,
     MatTableModule,
     FormsModule,
-    MatTabsModule
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatInputModule,
+    MatFormFieldModule
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
@@ -36,8 +44,35 @@ export class AppComponent implements OnInit {
 
   metricModelGroup: MetricModelGroup = MetricModelGroup.KEYBOARD;
   rankingList: Array<Ranking> = [];
+  
+  searchControl = new FormControl('');
+  options: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+  filteredOptions: Observable<string[]>;
+  selectedKey: string = ''; // Valor padrão
 
-  constructor(private rankingService: RankingServiceWeb) {}
+  constructor(private rankingService: RankingServiceWeb) {
+    this.filteredOptions = this.searchControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value || '')),
+    );
+  }
+
+  onOptionSelected(event: any) {
+    this.selectedKey = event.option.value;
+    if (this.metricModelGroup === MetricModelGroup.KEYBOARD) {
+      const singleKeysData = this.rankingService.listSingleKeyRankings(this.selectedKey);
+      const specificKeyRanking = this.rankingList.find(r => r.name === 'specificKeyPressed');
+      if (specificKeyRanking) {
+        specificKeyRanking.description = `Caractere "${this.selectedKey}" pressionado`;
+        specificKeyRanking.data = singleKeysData;
+      }
+    }
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+  }
 
   ngOnInit(): void {
     this.loadRankings();
@@ -45,18 +80,19 @@ export class AppComponent implements OnInit {
 
   selectMetricModelGroup(metricModelGroup: MetricModelGroup) {
     this.metricModelGroup = metricModelGroup;
-    this.rankingList = [];
     this.loadRankings();
   }
 
   private loadRankings(): void {
+    this.rankingList = []; // Limpa a lista antes de adicionar novos rankings
+    
     if (this.metricModelGroup == MetricModelGroup.KEYBOARD) {
-      const singleKeysData = this.rankingService.listSingleKeyRankings("1");
-      const singleKeysRanking: Ranking = new Ranking("Caractere pressionado", "quantidade", singleKeysData);
+      const singleKeysData = this.rankingService.listSingleKeyRankings(this.selectedKey);
+      const singleKeysRanking: Ranking = new Ranking(`Caractere "${this.selectedKey}" pressionado`, "specificKeyPressed", "quantidade", singleKeysData);
       this.rankingList.push(singleKeysRanking)
 
       const allKeysData = this.rankingService.listAllKeysRankings();
-      const allKeysRanking: Ranking = new Ranking("Caracteres pressionados", "quantidade", allKeysData);
+      const allKeysRanking: Ranking = new Ranking("Caracteres pressionados", "allKeysPressed", "quantidade", allKeysData);
       this.rankingList.push(allKeysRanking)
 
       return;
@@ -64,11 +100,11 @@ export class AppComponent implements OnInit {
 
     if (this.metricModelGroup == MetricModelGroup.MOUSE) {
       const mouseClickData = this.rankingService.listMouseClickRankings();
-      const mouseClickRanking: Ranking = new Ranking("Clicks de mouse", "clicks", mouseClickData);
+      const mouseClickRanking: Ranking = new Ranking("Clicks de mouse", "mouseClicks", "clicks", mouseClickData);
       this.rankingList.push(mouseClickRanking)
 
       const mouseMovementData = this.rankingService.listMouseMovementRankings();
-      const mouseMovementRanking: Ranking = new Ranking("Movimento do mouse", "metros", mouseMovementData);
+      const mouseMovementRanking: Ranking = new Ranking("Movimento do mouse", "mouseMovement", "metros", mouseMovementData);
       this.rankingList.push(mouseMovementRanking)
 
       return;

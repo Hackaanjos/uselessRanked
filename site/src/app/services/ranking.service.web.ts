@@ -13,11 +13,11 @@ export class RankingServiceWeb implements RankingServiceInterface {
     constructor(private http: HttpRequestManager) {}
 
     public getSingleKeyRanking(key: string): Observable<PaginatedList<UserRanking>> {
-        return this.http.get<PaginatedList<UserRanking>>(`/keypressed/${key}`);
+        return this.http.get<PaginatedList<UserRanking>>(`keypressed/${key}`);
     }
 
     public getAllKeysRanking(): Observable<PaginatedList<UserRanking>> {
-        return this.http.get<PaginatedList<UserRanking>>(`/keypressed`);
+        return this.http.get<PaginatedList<UserRanking>>(`keypressed`);
     }
 
 }

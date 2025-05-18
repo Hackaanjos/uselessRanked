@@ -9,6 +9,7 @@ import com.codecon.hackaton.hackanjos.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -39,7 +40,10 @@ public class UserRankingController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserRankDTO> getUserMetrics(@AuthenticationPrincipal OAuth2User oAuth2User, @PathVariable String intervalFilterString) {
         String email = oAuth2User.getAttribute("email");
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(null);
+        }
 
         IntervalFilter intervalFilter = IntervalFilter.fromString(intervalFilterString);
         LocalDateTime startDateTime = IntervalFilter.getLocalDateTimeByIntervalFilter(intervalFilter);

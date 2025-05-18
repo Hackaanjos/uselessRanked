@@ -15,7 +15,7 @@ O Useless Ranked é um ranking, tipo o strava, mas que metrifica o seu "trabalho
 
 ## Como funciona?
 
-O projeto é divido em três partes:
+O projeto é dividido em três partes:
 
 * API Backend em Spring Boot.
 * Um executável feito em `Electron`, que coleta os dados do usuário e os armazena em um banco de dados

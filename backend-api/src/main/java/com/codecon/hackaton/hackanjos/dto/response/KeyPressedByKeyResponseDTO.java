@@ -1,4 +1,4 @@
-package com.codecon.hackaton.hackanjos.dto.reponse;
+package com.codecon.hackaton.hackanjos.dto.response;
 
 import com.codecon.hackaton.hackanjos.model.KeyPressed;
 

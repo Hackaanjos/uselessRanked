@@ -1,6 +1,6 @@
 package com.codecon.hackaton.hackanjos.controller.ranking;
 
-import com.codecon.hackaton.hackanjos.dto.reponse.ranking.MouseClickDTO;
+import com.codecon.hackaton.hackanjos.dto.response.ranking.MouseClickDTO;
 import com.codecon.hackaton.hackanjos.model.enums.IntervalFilter;
 import com.codecon.hackaton.hackanjos.service.MouseClickService;
 

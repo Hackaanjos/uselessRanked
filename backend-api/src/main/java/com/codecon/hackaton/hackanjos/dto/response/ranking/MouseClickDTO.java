@@ -1,4 +1,4 @@
-package com.codecon.hackaton.hackanjos.dto.reponse.ranking;
+package com.codecon.hackaton.hackanjos.dto.response.ranking;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,7 +1,7 @@
 package com.codecon.hackaton.hackanjos.service;
 
-import com.codecon.hackaton.hackanjos.dto.reponse.AllKeyPressedResponseDTO;
-import com.codecon.hackaton.hackanjos.dto.reponse.KeyPressedByKeyResponseDTO;
+import com.codecon.hackaton.hackanjos.dto.response.AllKeyPressedResponseDTO;
+import com.codecon.hackaton.hackanjos.dto.response.KeyPressedByKeyResponseDTO;
 import com.codecon.hackaton.hackanjos.model.KeyPressed;
 import com.codecon.hackaton.hackanjos.model.User;
 import com.codecon.hackaton.hackanjos.model.enums.IntervalFilter;
@@ -9,7 +9,6 @@ import com.codecon.hackaton.hackanjos.repository.KeyPressedRepository;
 
 import lombok.AllArgsConstructor;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

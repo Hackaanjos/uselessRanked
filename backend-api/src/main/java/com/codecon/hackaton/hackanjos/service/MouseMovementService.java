@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MouseMovementService {
 
-    private MouseMovementRepository mouseMovementRepository;
-    private AchievementService achievementService;
+    private final MouseMovementRepository mouseMovementRepository;
+    private final AchievementService achievementService;
 
     public void saveOrUpdateEvent(Long distance, User user) {
         LocalDateTime localStartDateTime = LocalDate.now().atStartOfDay();

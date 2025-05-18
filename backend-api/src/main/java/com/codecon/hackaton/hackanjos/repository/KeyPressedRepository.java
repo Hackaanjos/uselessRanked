@@ -1,6 +1,7 @@
 package com.codecon.hackaton.hackanjos.repository;
 
 import com.codecon.hackaton.hackanjos.dto.reponse.AllKeyPressedResponseDTO;
+import com.codecon.hackaton.hackanjos.dto.reponse.KeyPressedByKeyResponseDTO;
 import com.codecon.hackaton.hackanjos.model.KeyPressed;
 
 import org.springframework.data.domain.Page;
@@ -16,9 +17,11 @@ public interface KeyPressedRepository extends JpaRepository<KeyPressed, Long> {
 
     KeyPressed getKeyPressedByKeyCodeAndUserIdAndEventDateBetween(String keyCode, Long userId, LocalDateTime eventDate, LocalDateTime eventDate2);
 
-    Page<KeyPressed> findAllByKeyCodeOrderByEventCounterDesc(String key, Pageable pageable);
+    @Query("SELECT new com.codecon.hackaton.hackanjos.dto.reponse.KeyPressedByKeyResponseDTO(SUM(k.eventCounter), k.user.name, k.user.email) FROM KeyPressed k" +
+            " WHERE k.keyCode = :key AND k.eventDate > :localDateTime GROUP BY k.user ORDER BY SUM(k.eventCounter) DESC")
+    Page<KeyPressedByKeyResponseDTO> findAllByKeyCodeAndEventDateAfterOrderByEventCounterDesc(String key, LocalDateTime localDateTime, Pageable pageable);
 
     @Query("SELECT new com.codecon.hackaton.hackanjos.dto.reponse.AllKeyPressedResponseDTO(SUM(k.eventCounter), k.user.name, k.user.email) " +
-            "FROM KeyPressed k GROUP BY k.user")
-    Page<AllKeyPressedResponseDTO> sumEventCounterGroupByUserId(Pageable pageable);
+            "FROM KeyPressed k WHERE k.eventDate > :localDateTime GROUP BY k.user ORDER BY SUM(k.eventCounter) DESC")
+    Page<AllKeyPressedResponseDTO> sumEventCounterGroupByUserId(LocalDateTime localDateTime, Pageable pageable);
 }

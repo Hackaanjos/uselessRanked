@@ -38,7 +38,7 @@ public class SecurityConfig {
                 })
                 .defaultAuthenticationEntryPointFor(
                         (request, response, authException) -> response.sendRedirect("/api/error/not-found"),
-                        request -> true // aplica para todos os requests
+                        request -> true
                 )
             )
             .oauth2Login(oauth2 -> oauth2

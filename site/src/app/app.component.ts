@@ -49,7 +49,7 @@ export class AppComponent implements OnInit {
   searchControl = new FormControl('');
   options: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
   filteredOptions: Observable<string[]>;
-  selectedKey: string = ''; // Valor padrão
+  selectedKey: string = 'A'; // Valor padrão
 
   constructor(
     private rankingService: RankingServiceWeb,
@@ -68,7 +68,7 @@ export class AppComponent implements OnInit {
       const singleKeysData = this.rankingService.listSingleKeyRankings(this.selectedKey);
       const specificKeyRanking = this.rankingList.find(r => r.name === 'specificKeyPressed');
       if (specificKeyRanking) {
-        specificKeyRanking.description = `Caractere "${this.selectedKey}" pressionado`;
+        specificKeyRanking.description = `Tecla "${this.selectedKey}" pressionada`;
         specificKeyRanking.data = singleKeysData;
       }
     }
@@ -103,11 +103,11 @@ export class AppComponent implements OnInit {
 
     if (this.metricModelGroup == MetricModelGroup.KEYBOARD) {
       const singleKeysData = this.rankingService.listSingleKeyRankings(this.selectedKey);
-      const singleKeysRanking: Ranking = new Ranking(`Caractere "${this.selectedKey}" pressionado`, "specificKeyPressed", "quantidade", singleKeysData);
+      const singleKeysRanking: Ranking = new Ranking(`Tecla "${this.selectedKey}" pressionada`, "specificKeyPressed", "quantidade", singleKeysData);
       this.rankingList.push(singleKeysRanking)
 
       const allKeysData = this.rankingService.listAllKeysRankings();
-      const allKeysRanking: Ranking = new Ranking("Caracteres pressionados", "allKeysPressed", "quantidade", allKeysData);
+      const allKeysRanking: Ranking = new Ranking("Teclas pressionadas", "allKeysPressed", "quantidade", allKeysData);
       this.rankingList.push(allKeysRanking)
 
       return;

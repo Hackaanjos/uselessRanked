@@ -64,16 +64,11 @@ public class KeyPressedService {
     }
 
     private static LocalDateTime getLocalDateTimeByIntervalFilter(IntervalFilter intervalFilter) {
-        LocalDateTime localStartDateTime;
-        switch (intervalFilter) {
-            case DAY -> localStartDateTime = LocalDate.now().atStartOfDay();
-            case WEEK -> localStartDateTime = LocalDate.now().minusDays(7).atStartOfDay();
-            case MONTH -> localStartDateTime = LocalDate.now().minusMonths(1).atStartOfDay();
-            case ALL_TIME -> localStartDateTime = LocalDate.now().minusYears(100).atStartOfDay();
-
-            default -> throw new NotImplementedException();
-        }
-
-        return localStartDateTime;
+        return switch (intervalFilter) {
+            case DAY -> LocalDate.now().atStartOfDay();
+            case WEEK -> LocalDate.now().minusDays(7).atStartOfDay();
+            case MONTH -> LocalDate.now().minusMonths(1).atStartOfDay();
+            case ALL_TIME -> LocalDate.now().minusYears(100).atStartOfDay();
+        };
     }
 }

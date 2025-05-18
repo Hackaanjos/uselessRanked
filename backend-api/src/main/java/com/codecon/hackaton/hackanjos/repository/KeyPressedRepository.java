@@ -18,7 +18,7 @@ public interface KeyPressedRepository extends JpaRepository<KeyPressed, Long> {
     KeyPressed getKeyPressedByKeyCodeAndUserIdAndEventDateBetween(Long keyCode, Long userId, LocalDateTime eventDate, LocalDateTime eventDate2);
 
     @Query("SELECT new com.codecon.hackaton.hackanjos.dto.response.ranking.KeyPressedByKeyResponseDTO(SUM(k.eventCounter), k.user.name, k.user.email, k.user.picture) " +
-            "FROM KeyPressed k WHERE k.keyCode = :key AND k.eventDate > :localDateTime GROUP BY k.user.name, k.user.email ORDER BY SUM(k.eventCounter) DESC")
+            "FROM KeyPressed k WHERE k.keyCode = :key AND k.eventDate > :localDateTime GROUP BY k.user ORDER BY SUM(k.eventCounter) DESC")
     Page<KeyPressedByKeyResponseDTO> findAllByKeyCodeAndEventDateAfterOrderByEventCounterDesc(Long key, LocalDateTime localDateTime, Pageable pageable);
 
     @Query("SELECT new com.codecon.hackaton.hackanjos.dto.response.ranking.AllKeyPressedResponseDTO(SUM(k.eventCounter), k.user.name, k.user.email, k.user.picture) " +

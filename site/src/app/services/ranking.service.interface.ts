@@ -12,7 +12,7 @@ export interface RankingServiceInterface {
   listAllKeysRankings(): Record<PeriodType, UserRanking[]>;
 
   getMouseClickRanking(periodType: PeriodType): Observable<PaginatedList<UserRanking>>;
-  listAllKeysRankings(): Record<PeriodType, UserRanking[]>;
+  listMouseClickRankings(): Record<PeriodType, UserRanking[]>;
 
   getMouseMovementRanking(periodType: PeriodType): Observable<PaginatedList<UserRanking>>;
   listMouseMovementRankings(): Record<PeriodType, UserRanking[]>;

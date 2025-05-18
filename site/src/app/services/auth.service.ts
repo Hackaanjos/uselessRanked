@@ -36,14 +36,16 @@ export class AuthService {
   }
 
   login(): void {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+    const callback = encodeURIComponent(window.location.origin);
+    window.location.href = `http://localhost:8080/oauth2/authorization/google?callback=${callback}`;
   }
 
   logout(): void {
-    window.location.href = 'http://localhost:8080/api/auth/logout';
+    const callback = encodeURIComponent(window.location.origin);
+    window.location.href = `http://localhost:8080/api/auth/logout?callback=${callback}`;
   }
 
   isAuthenticated(): boolean {
     return this.currentUserSubject.value !== null;
   }
-} 
+}

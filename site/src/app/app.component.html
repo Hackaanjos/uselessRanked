@@ -4,14 +4,34 @@
             Useless Ranked
         </h1>
         <mat-nav-list>
+            <ng-template ngFor let-objMetricModelGroup [ngForOf]="Object.values(MetricModelGroup)" let-i="index">
+                <mat-list-item>
+                    <button
+                        *ngIf="metricModelGroup === objMetricModelGroup"
+                        mat-flat-button
+                        class="w-full"
+                        (click)="selectMetricModelGroup(objMetricModelGroup)"
+                    >
+                        {{ objMetricModelGroup }}
+                    </button>
+
+                    <button
+                        *ngIf="metricModelGroup !== objMetricModelGroup"
+                        mat-stroked-button
+                        class="w-full"
+                        (click)="selectMetricModelGroup(objMetricModelGroup)"
+                    >
+                        {{ objMetricModelGroup }}
+                    </button>
+                </mat-list-item>
+            </ng-template>
+
+
+            <div class="space"></div>
+
             <mat-list-item>
-                <button mat-flat-button class="w-full text-left" (click)="selectMetricModelGroup(MetricModelGroup.KEYBOARD)">
-                    Teclado
-                </button>
-            </mat-list-item>
-            <mat-list-item>
-                <button mat-flat-button class="w-full text-left" (click)="selectMetricModelGroup(MetricModelGroup.MOUSE)">
-                    Mouse
+                <button mat-stroked-button class="w-full">
+                    Logar
                 </button>
             </mat-list-item>
         </mat-nav-list>

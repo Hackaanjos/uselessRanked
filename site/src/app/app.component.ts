@@ -10,14 +10,14 @@ import { FormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { PeriodType } from "../utils/enums/PeriodType";
 import { MetricModelGroup } from "../utils/enums/MetricModelGroup";
-import { NgFor, NgForOf } from "@angular/common";
+import { NgFor, NgForOf, NgIf } from "@angular/common";
 import { RankingServiceWeb } from "./services/ranking.service.web";
 import { Ranking } from "./models/Ranking";
 
 @Component({
   selector: 'app-root',
   imports: [
-    NgForOf, NgFor,
+    NgForOf, NgFor, NgIf,
     MatTabsModule,
     MatSidenavModule,
     MatToolbarModule,

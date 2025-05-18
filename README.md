@@ -15,7 +15,17 @@ O Useless Ranked é um ranking, tipo o strava, mas que metrifica o seu "trabalho
 
 ## Como funciona?
 
+O projeto é divido em três partes:
+
+* API Backend em Spring Boot.
+* Um executável feito em `Electron`, que coleta os dados do usuário e os armazena em um banco de dados
+* Frontend em Angular, que é utilizado tanto no Web quanto no Electron
+
 ## Instalação
+
+* [API backend](backend-api/README.md)
+* [Frontend](site/README.md)
+* [Executável](electron-app/README.md)
 
 ## Sobre nós
 

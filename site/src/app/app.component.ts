@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
 import { PeriodType } from "../utils/enums/PeriodType";
 import { MetricModelGroup } from "../utils/enums/MetricModelGroup";
 import { NgFor, NgForOf, NgIf, AsyncPipe } from "@angular/common";
@@ -19,9 +20,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AuthService } from './services/auth.service';
+import { AchievementsComponent } from './components/achievements/achievements.component';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [
     NgForOf, NgFor, NgIf, AsyncPipe,
     MatTabsModule,
@@ -32,11 +35,13 @@ import { AuthService } from './services/auth.service';
     MatButtonToggleModule,
     MatCardModule,
     MatTableModule,
+    MatIconModule,
     FormsModule,
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    AchievementsComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
@@ -45,6 +50,7 @@ export class AppComponent implements OnInit {
   metricModelGroup: MetricModelGroup = MetricModelGroup.KEYBOARD;
   rankingList: Array<Ranking> = [];
   isLoggedIn$;
+  showAchievements = false;
 
   searchControl = new FormControl('');
   options: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
@@ -60,6 +66,11 @@ export class AppComponent implements OnInit {
       startWith(''),
       map(value => this._filter(value || '')),
     );
+  }
+
+  toggleAchievements() {
+    this.showAchievements = !this.showAchievements;
+    console.log('showAchievements:', this.showAchievements);
   }
 
   onOptionSelected(event: any) {
@@ -88,6 +99,7 @@ export class AppComponent implements OnInit {
 
   selectMetricModelGroup(metricModelGroup: MetricModelGroup) {
     this.metricModelGroup = metricModelGroup;
+    this.showAchievements = false;
     this.loadRankings();
   }
 

@@ -1,95 +1,111 @@
 <mat-sidenav-container class="h-screen">
-    <mat-sidenav mode="side" opened>
-        <h1 class="title">
-            Useless Ranked
-        </h1>
-        <mat-nav-list>
-            <ng-template ngFor let-objMetricModelGroup [ngForOf]="Object.values(MetricModelGroup)" let-i="index">
-                <mat-list-item>
-                    <button
-                        *ngIf="metricModelGroup === objMetricModelGroup"
-                        mat-flat-button
-                        class="w-full"
-                        (click)="selectMetricModelGroup(objMetricModelGroup)"
-                    >
-                        {{ objMetricModelGroup }}
-                    </button>
+    <mat-sidenav mode="side" opened class="h-full">
+        <div class="flex flex-col justify-between h-full">
+            <div class="flex flex-col">
+                <h1 class="title">
+                    Useless Ranked
+                </h1>
+                <mat-nav-list>
+                    <ng-template ngFor let-objMetricModelGroup [ngForOf]="Object.values(MetricModelGroup)" let-i="index">
+                        <mat-list-item>
+                            <button
+                                *ngIf="metricModelGroup === objMetricModelGroup"
+                                mat-flat-button
+                                class="w-full"
+                                (click)="selectMetricModelGroup(objMetricModelGroup)"
+                            >
+                                {{ objMetricModelGroup }}
+                            </button>
 
-                    <button
-                        *ngIf="metricModelGroup !== objMetricModelGroup"
-                        mat-stroked-button
-                        class="w-full"
-                        (click)="selectMetricModelGroup(objMetricModelGroup)"
-                    >
-                        {{ objMetricModelGroup }}
-                    </button>
-                </mat-list-item>
-            </ng-template>
+                            <button
+                                *ngIf="metricModelGroup !== objMetricModelGroup"
+                                mat-stroked-button
+                                class="w-full"
+                                (click)="selectMetricModelGroup(objMetricModelGroup)"
+                            >
+                                {{ objMetricModelGroup }}
+                            </button>
+                        </mat-list-item>
+                    </ng-template>
+                </mat-nav-list>
+            </div>
 
-            <div class="space"></div>
-
-            <mat-list-item *ngIf="authService.currentUser$ | async as user">
-                <div class="flex items-center gap-2 w-full">
-                    <img [src]="user.picture" [alt]="user.name" width="50" height="50" class="rounded-full">
+            <div class="flex flex-col mt-auto">
+                <mat-nav-list>
+                    <mat-list-item *ngIf="authService.currentUser$ | async as user">
+                        <div class="flex items-center gap-2 w-full">
+                            <img [src]="user.picture" [alt]="user.name" width="50" height="50" class="rounded-full">
                     <div class="img-space"></div>
-                    <span class="flex-1">{{ user.name }}</span>
-                </div>
-            </mat-list-item>
+                            <span class="flex-1">{{ user.name }}</span>
+                        </div>
+                    </mat-list-item>
 
-            <mat-list-item>
-                <button
-                    mat-stroked-button
-                    class="w-full"
-                    (click)="handleAuth()"
-                >
-                    {{ (isLoggedIn$ | async) ? 'Sair' : 'Logar com Google' }}
-                </button>
-            </mat-list-item>
-        </mat-nav-list>
+                    <mat-list-item *ngIf="authService.currentUser$ | async as user">
+                        <button mat-stroked-button class="w-full" (click)="toggleAchievements()">
+                            <div class="flex items-center gap-2">
+                                <mat-icon>emoji_events</mat-icon>
+                                <span>Conquistas</span>
+                            </div>
+                        </button>
+                    </mat-list-item>
+
+                    <mat-list-item>
+                        <button
+                            mat-stroked-button
+                            class="w-full"
+                            (click)="handleAuth()"
+                        >
+                            {{ (isLoggedIn$ | async) ? 'Sair' : 'Logar com Google' }}
+                        </button>
+                    </mat-list-item>
+                </mat-nav-list>
+            </div>
+        </div>
     </mat-sidenav>
 
     <mat-sidenav-content>
-        <h2 class="page-title">
-            Ranques de {{ metricModelGroup }}
-        </h2>
+        <ng-container *ngIf="!showAchievements">
+            <h2 class="page-title">
+                Ranques de {{ metricModelGroup }}
+            </h2>
 
-        <div class="page-content">
-            <ng-template ngFor let-ranking [ngForOf]="rankingList" let-i="index">
-                <mat-card>
-                    <mat-card-header class="!block">
-                        <div class="flex justify-between items-center">
-                            <h3 class="card-title">
-                                {{ ranking.description }} ({{ ranking.unit }})
-                            </h3>
-                            <mat-form-field class="w-64" *ngIf="ranking.name === 'specificKeyPressed'">
-                                <mat-label>Buscar ranking</mat-label>
-                                <input type="text"
-                                       class="w-full"
-                                       matInput
-                                       [formControl]="searchControl"
-                                       [matAutocomplete]="auto"
-                                       placeholder="Digite caractere específico">
-                                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
-                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                                        {{option}}
-                                    </mat-option>
-                                </mat-autocomplete>
-                            </mat-form-field>
-                        </div>
-                    </mat-card-header>
-                    <mat-card-content>
-                        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-                            <ng-template ngFor let-periodType [ngForOf]="Object.values(PeriodType)" let-i="index">
-                                <mat-tab [label]="periodType.toString()">
-                                    <table mat-table [dataSource]="ranking.data[periodType]">
-                                        <ng-container matColumnDef="position">
-                                            <th mat-header-cell *matHeaderCellDef class="col-position">Posição</th>
-                                            <td mat-cell *matCellDef="let i = index" class="col-position">{{ i + 1 }}</td>
-                                        </ng-container>
+            <div class="page-content">
+                <ng-template ngFor let-ranking [ngForOf]="rankingList" let-i="index">
+                    <mat-card>
+                        <mat-card-header class="!block">
+                            <div class="flex justify-between items-center">
+                                <h3 class="card-title">
+                                    {{ ranking.description }} ({{ ranking.unit }})
+                                </h3>
+                                <mat-form-field class="w-64" *ngIf="ranking.name === 'specificKeyPressed'">
+                                    <mat-label>Buscar ranking</mat-label>
+                                    <input type="text"
+                                           class="w-full"
+                                           matInput
+                                           [formControl]="searchControl"
+                                           [matAutocomplete]="auto"
+                                           placeholder="Digite caractere específico">
+                                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+                                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                            {{option}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+                                <ng-template ngFor let-periodType [ngForOf]="Object.values(PeriodType)" let-i="index">
+                                    <mat-tab [label]="periodType.toString()">
+                                        <table mat-table [dataSource]="ranking.data[periodType]">
+                                            <ng-container matColumnDef="position">
+                                                <th mat-header-cell *matHeaderCellDef class="col-position">Posição</th>
+                                                <td mat-cell *matCellDef="let i = index" class="col-position">{{ i + 1 }}</td>
+                                            </ng-container>
 
-                                        <ng-container matColumnDef="name">
-                                            <th mat-header-cell *matHeaderCellDef class="col-name">Usuário</th>
-                                            <td mat-cell *matCellDef="let user" class="col-name">
+                                            <ng-container matColumnDef="name">
+                                                <th mat-header-cell *matHeaderCellDef class="col-name">Usuário</th>
+                                                <td mat-cell *matCellDef="let user" class="col-name">
                                                 <div class="flex items-center gap-2 w-full">
                                                     <img [src]="user.userPicture" [alt]="user.userName" width="30" height="30" class="rounded-full">
                                                     <div class="img-space"></div>
@@ -98,23 +114,26 @@
                                                     </span>
                                                 </div>
                                             </td>
-                                        </ng-container>
+                                            </ng-container>
 
-                                        <ng-container matColumnDef="score">
-                                            <th mat-header-cell *matHeaderCellDef class="col-score">{{ ranking.unit }}</th>
-                                            <td mat-cell *matCellDef="let user" class="col-score">{{ user.eventCounter }}</td>
-                                        </ng-container>
+                                            <ng-container matColumnDef="score">
+                                                <th mat-header-cell *matHeaderCellDef class="col-score">{{ ranking.unit }}</th>
+                                                <td mat-cell *matCellDef="let user" class="col-score">{{ user.eventCounter }}</td>
+                                            </ng-container>
 
-                                        <tr mat-header-row *matHeaderRowDef="['position', 'name', 'score']"></tr>
-                                        <tr mat-row *matRowDef="let row; columns: ['position', 'name', 'score'];"></tr>
-                                    </table>
-                                </mat-tab>
-                            </ng-template>
-                        </mat-tab-group>
-                    </mat-card-content>
-                </mat-card>
-                <br>
-            </ng-template>
-        </div>
+                                            <tr mat-header-row *matHeaderRowDef="['position', 'name', 'score']"></tr>
+                                            <tr mat-row *matRowDef="let row; columns: ['position', 'name', 'score'];"></tr>
+                                        </table>
+                                    </mat-tab>
+                                </ng-template>
+                            </mat-tab-group>
+                        </mat-card-content>
+                    </mat-card>
+                    <br>
+                </ng-template>
+            </div>
+        </ng-container>
+
+        <app-achievements *ngIf="showAchievements"></app-achievements>
     </mat-sidenav-content>
 </mat-sidenav-container>

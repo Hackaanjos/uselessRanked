@@ -25,6 +25,8 @@ public class KeyPressedController {
         User user = userRepository.findById(1L).orElseThrow(RuntimeException::new);
 
         for (KeyPressedRequestDTO keyPressedRequestDTO : keyPressedRequestDTOList) {
+            System.out.println(keyPressedRequestDTO.getKeyCode());
+            System.out.println(keyPressedRequestDTO.getCount());
             keyPressedService.saveOrUpdateEvent(keyPressedRequestDTO.getKeyCode(), keyPressedRequestDTO.getCount(), user);
         }
 

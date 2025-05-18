@@ -25,12 +25,12 @@ public class KeyPressedRankingController {
 
     @GetMapping("/{key}/findByKey/{intervalFilterString}")
     public ResponseEntity<Page<KeyPressedByKeyResponseDTO>> listByKey(
-            @PathVariable String key,
+            @PathVariable Long key,
             @PathVariable String intervalFilterString,
             @PageableDefault(page = 0, size = 5) Pageable pageable) {
         IntervalFilter intervalFilter = IntervalFilter.fromString(intervalFilterString);
 
-        return ResponseEntity.ok(keyPressedService.listByKey(key.toUpperCase(), intervalFilter, pageable));
+        return ResponseEntity.ok(keyPressedService.listByKey(key, intervalFilter, pageable));
     }
 
     @GetMapping("/{intervalFilterString}")

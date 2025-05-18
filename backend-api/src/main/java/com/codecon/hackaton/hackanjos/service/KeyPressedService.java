@@ -23,7 +23,7 @@ public class KeyPressedService {
     private KeyPressedRepository keyPressedRepository;
     private AchievementService achievementService;
 
-    public void saveOrUpdateEvent(String keyCode, Long eventCounter, User user) {
+    public void saveOrUpdateEvent(Long keyCode, Long eventCounter, User user) {
         LocalDateTime localStartDateTime = LocalDate.now().atStartOfDay();
         LocalDateTime localEndDateTime = LocalDate.now().atTime(23, 59, 59);
         KeyPressed keyPressed = keyPressedRepository.getKeyPressedByKeyCodeAndUserIdAndEventDateBetween(keyCode, user.getId(), localStartDateTime, localEndDateTime);
@@ -37,7 +37,7 @@ public class KeyPressedService {
         }
     }
 
-    public Page<KeyPressedByKeyResponseDTO> listByKey(String key, IntervalFilter intervalFilter, Pageable pageable) {
+    public Page<KeyPressedByKeyResponseDTO> listByKey(Long key, IntervalFilter intervalFilter, Pageable pageable) {
         LocalDateTime localStartDateTime = IntervalFilter.getLocalDateTimeByIntervalFilter(intervalFilter);
 
         return keyPressedRepository
@@ -50,7 +50,7 @@ public class KeyPressedService {
         return keyPressedRepository.sumEventCounterGroupByUserId(localDateTime, pageable);
     }
 
-    private KeyPressed save(String keyCode, Long eventCounter, User user) {
+    private KeyPressed save(Long keyCode, Long eventCounter, User user) {
         KeyPressed keyPressed = new KeyPressed();
         keyPressed.setKeyCode(keyCode);
         keyPressed.setEventCounter(eventCounter);
